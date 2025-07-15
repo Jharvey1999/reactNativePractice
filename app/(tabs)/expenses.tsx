@@ -1,21 +1,17 @@
 import React, { useState } from 'react';
-import { Text, Platform, StyleSheet, View, TouchableOpacity } from 'react-native';
-import { Image } from 'expo-image';
-
+import { Text, Platform, View, TouchableOpacity, ScrollView } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import { sharedStyles } from '@/components/styles/styles';
 
-export default function HomeScreen() {
+export default function ExpensesScreen() {
   const [leftOpen, setLeftOpen] = useState(false);
   const [rightOpen, setRightOpen] = useState(false);
 
   const colorScheme = useColorScheme() ?? 'light';
-
 
   // Temp friends list
   const friends = [ 'Oppenheimer', 'Einstein', 'Newton', 'Curie', 'Tesla' ];
@@ -25,11 +21,16 @@ export default function HomeScreen() {
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#30c035ff', dark: '#17851bff' }}
       headerImage={
-        <Text style={{fontSize: 58, color: colorScheme === 'dark' ? 'white' : 'black', textAlign: 'center', marginTop: 0}}>
-          Not Quite Splitwise 
+        <Text style={{
+          fontSize: 58,
+          color: colorScheme === 'dark' ? 'white' : 'black',
+          textAlign: 'center',
+          marginTop: 0
+        }}>
+          Expenses
         </Text>
-        }
-      >
+      }
+    >
       <View style={sharedStyles.row}>
         {/* Left Collapse Tab */}
         {leftOpen && (
@@ -50,7 +51,7 @@ export default function HomeScreen() {
               <TouchableOpacity
                 style={[sharedStyles.leftTabButton, {backgroundColor: colorScheme === 'dark' ? '#222' : '#ccc'}]}
                 onPress={() => {
-                  // router.push('/'); // Uncomment to navigate to Home
+                  router.push('/'); // Navigate to Home <-- idk why error when it works
                 }}
               >
                 <Text style={[sharedStyles.leftTabText, { color: colorScheme === 'dark' ? 'white' : 'black' }]}>Home</Text>
@@ -58,7 +59,7 @@ export default function HomeScreen() {
               <TouchableOpacity
                 style={[sharedStyles.leftTabButton, {backgroundColor: colorScheme === 'dark' ? '#222' : '#ccc'}]}
                 onPress={() => {
-                  router.push('/expenses'); // navigate to Expenses
+                  // Already on Expenses
                 }}
               >
                 <Text style={[sharedStyles.leftTabText, { color: colorScheme === 'dark' ? 'white' : 'black' }]}>Expenses</Text>
@@ -82,42 +83,18 @@ export default function HomeScreen() {
           style={[
             sharedStyles.col2,
             { flex: 2 },
-            !leftOpen && { paddingLeft: 75 }, // 44 (button) + 31 (gap) <--spacer for collapsed tabs
-            !rightOpen && { paddingRight: 75 }, // same same
+            !leftOpen && { paddingLeft: 75 },
+            !rightOpen && { paddingRight: 75 },
           ]}>
           {/* Main content */}
           <ThemedView style={sharedStyles.titleContainer}>
-            <ThemedText type="title">Welcome!</ThemedText>
+            <ThemedText type="title">Expenses Page</ThemedText>
           </ThemedView>
           <ThemedView style={sharedStyles.stepContainer}>
-            <ThemedText type="subtitle">Step 1: Try it</ThemedText>
+            <ThemedText type="subtitle">Your Expenses</ThemedText>
             <ThemedText>
-              Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-              Press{' '}
-              <ThemedText type="defaultSemiBold">
-                {Platform.select({
-                  ios: 'cmd + d',
-                  android: 'cmd + m',
-                  web: 'F12',
-                })}
-              </ThemedText>{' '}
-              to open developer tools.
-            </ThemedText>
-          </ThemedView>
-          <ThemedView style={sharedStyles.stepContainer}>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-            <ThemedText>
-              {`Tap the Explore tab to learn more about what's included in this starter app.`}
-            </ThemedText>
-          </ThemedView>
-          <ThemedView style={sharedStyles.stepContainer}>
-            <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-            <ThemedText>
-              {`When you're ready, run `}
-              <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-              <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-              <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-              <ThemedText type="defaultSemiBold">app-example</ThemedText>.
+              {/* Add your expenses list or content here */}
+              This is where your expenses will be listed.
             </ThemedText>
           </ThemedView>
         </View>
@@ -140,20 +117,18 @@ export default function HomeScreen() {
 
         {/* Left Expand Tab */}
         {!leftOpen && (
-          <>
-            <TouchableOpacity
-              style={[sharedStyles.tab, { left: 0 }]}
-              onPress={() => setLeftOpen(true)}
-              activeOpacity={0.8}
-            >
-              <Text style={[
-                sharedStyles.expandButton,
-                { color: colorScheme === 'dark' ? 'white' : '#black' }
-              ]}>
-                {'\u2261'}
-              </Text>
-            </TouchableOpacity>
-          </>
+          <TouchableOpacity
+            style={[sharedStyles.tab, { left: 0 }]}
+            onPress={() => setLeftOpen(true)}
+            activeOpacity={0.8}
+          >
+            <Text style={[
+              sharedStyles.expandButton,
+              { color: colorScheme === 'dark' ? 'white' : 'black' }
+            ]}>
+              {'\u2261'}
+            </Text>
+          </TouchableOpacity>
         )}
 
         {/* Right Expand Tab */}
@@ -170,6 +145,3 @@ export default function HomeScreen() {
     </ParallaxScrollView>
   );
 }
-
-
-
