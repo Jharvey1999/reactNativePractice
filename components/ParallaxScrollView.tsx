@@ -1,17 +1,18 @@
 import type { PropsWithChildren, ReactElement } from 'react';
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet, SafeAreaView } from 'react-native';
 import Animated, {
   interpolate,
   useAnimatedRef,
   useAnimatedStyle,
   useScrollViewOffset,
 } from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ThemedView } from '@/components/ThemedView';
 import { useBottomTabOverflow } from '@/components/ui/TabBarBackground';
 import { useColorScheme } from '@/hooks/useColorScheme';
-
-const HEADER_HEIGHT = 75;
+import { sharedStyles } from '@/components/styles/styles';
+import { HEADER_HEIGHT } from '@/components/styles/constants';
 
 type Props = PropsWithChildren<{
   headerImage: ReactElement;
@@ -24,6 +25,7 @@ export default function ParallaxScrollView({
   headerBackgroundColor,
 }: Props) {
   const colorScheme = useColorScheme() ?? 'light';
+  const insets = useSafeAreaInsets(); // <-- Get safe area insets
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
   const scrollOffset = useScrollViewOffset(scrollRef);
   const bottom = useBottomTabOverflow();
@@ -51,15 +53,20 @@ export default function ParallaxScrollView({
         scrollEventThrottle={16}
         scrollIndicatorInsets={{ bottom }}
         contentContainerStyle={{ paddingBottom: bottom }}>
-        <Animated.View
-          style={[
-            styles.header,
-            { backgroundColor: headerBackgroundColor[colorScheme] },
-            headerAnimatedStyle,
-          ]}>
-          {headerImage}
-        </Animated.View>
-        <ThemedView style={styles.content}>{children}</ThemedView>
+        <SafeAreaView>
+          <Animated.View
+            style={[
+              sharedStyles.parallaxHeader,
+              {
+                backgroundColor: headerBackgroundColor[colorScheme],
+                paddingTop: Platform.OS === 'web' ? 16 : insets.top, // <-- Dynamic padding!
+              },
+              headerAnimatedStyle,
+            ]}>
+            {headerImage}
+          </Animated.View>
+        </SafeAreaView>
+        <ThemedView style={sharedStyles.parallaxContent}>{children}</ThemedView>
       </Animated.ScrollView>
     </ThemedView>
   );
@@ -68,15 +75,5 @@ export default function ParallaxScrollView({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  header: {
-    height: HEADER_HEIGHT,
-    overflow: 'hidden',
-  },
-  content: {
-    flex: 1,
-    padding: 32,
-    gap: 16,
-    overflow: 'hidden',
   },
 });

@@ -19,18 +19,22 @@ export default function ExpensesScreen() {
 
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#30c035ff', dark: '#17851bff' }}
-      headerImage={
-        <Text style={{
-          fontSize: 58,
-          color: colorScheme === 'dark' ? 'white' : 'black',
-          textAlign: 'center',
-          marginTop: 0
-        }}>
-          Expenses
-        </Text>
-      }
-    >
+          headerBackgroundColor={{ light: '#30c035ff', dark: '#17851bff' }}
+          headerImage={
+            <View style={{ paddingTop: 0, marginTop: 0, alignItems: 'center', justifyContent: 'flex-start' }}>
+              <Text
+                style={{
+                  fontSize: Platform.OS === 'web' ? 58 : 30,
+                  color: colorScheme === 'dark' ? 'white' : 'black',
+                  textAlign: 'center',
+                  marginTop: 0,
+                }}
+              >
+                Expenses
+              </Text>
+            </View>
+          }
+        >
       <View style={sharedStyles.row}>
         {/* Left Collapse Tab */}
         {leftOpen && (
@@ -44,8 +48,21 @@ export default function ExpensesScreen() {
         )}
 
         {/* Left Column */}
-        <View style={[sharedStyles.col1, {backgroundColor: colorScheme === 'dark' ? 'black' : 'white', flex: leftOpen ? 1 : 0 }]}>
-          {leftOpen && (
+        {leftOpen && (
+          <View
+            style={[
+              sharedStyles.col1,
+              {
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                bottom: 0,
+                width: '100%', // Cover the whole screen (or use a fixed width if you want partial cover)
+                backgroundColor: colorScheme === 'dark' ? 'black' : 'white',
+                zIndex: 10, // Ensure it's above other columns
+              },
+            ]}
+          >
             <ScrollView contentContainerStyle={sharedStyles.leftContent}>
               {/* Navigation Tabs */}
               <TouchableOpacity
@@ -75,16 +92,24 @@ export default function ExpensesScreen() {
                 </View>
               ))}
             </ScrollView>
-          )}
-        </View>
+            {/* Collapse button */}
+            <TouchableOpacity
+              style={[sharedStyles.tab, { left: 0, position: 'absolute', top: 0 }]}
+              onPress={() => setLeftOpen(false)}
+              activeOpacity={0.8}
+            >
+              <Text style={[sharedStyles.expandButton, { color: colorScheme === 'dark' ? 'white' : 'black' }]}>{'\u2261'}</Text>
+            </TouchableOpacity>
+          </View>
+        )}
 
         {/* Center Column */}
         <View
           style={[
             sharedStyles.col2,
             { flex: 2 },
-            !leftOpen && { paddingLeft: 75 },
-            !rightOpen && { paddingRight: 75 },
+            !leftOpen && { paddingLeft: 25 },
+            !rightOpen && { paddingRight: 0 },
           ]}>
           {/* Main content */}
           <ThemedView style={sharedStyles.titleContainer}>
@@ -93,27 +118,13 @@ export default function ExpensesScreen() {
           <ThemedView style={sharedStyles.stepContainer}>
             <ThemedText type="subtitle">Your Expenses</ThemedText>
             <ThemedText>
-              {/* Add your expenses list or content here */}
+              {/* Expenses List */}
               This is where your expenses will be listed.
             </ThemedText>
           </ThemedView>
         </View>
 
-        {/* Right Column */}
-        <View style={[sharedStyles.col3, {backgroundColor: colorScheme === 'dark' ? 'black' : 'white', flex: rightOpen ? 1 : 0 }]}>
-          {rightOpen && <Text>Right content</Text>}
-        </View>
-
-        {/* Right Collapse Tab */}
-        {rightOpen && (
-          <TouchableOpacity
-            style={[sharedStyles.tab, { right: 0 }]}
-            onPress={() => setRightOpen(false)}
-            activeOpacity={0.8}
-          >
-            <Text style={[sharedStyles.expandButton, { color: colorScheme === 'dark' ? 'white' : 'black' }]}>{'\u2261'}</Text>
-          </TouchableOpacity>
-        )}
+        
 
         {/* Left Expand Tab */}
         {!leftOpen && (
@@ -131,16 +142,7 @@ export default function ExpensesScreen() {
           </TouchableOpacity>
         )}
 
-        {/* Right Expand Tab */}
-        {!rightOpen && (
-          <TouchableOpacity
-            style={[sharedStyles.tab, { right: 0 }]}
-            onPress={() => setRightOpen(true)}
-            activeOpacity={0.8}
-          >
-            <Text style={[sharedStyles.expandButton, { color: colorScheme === 'dark' ? 'white' : 'black' }]}>{'\u2261'}</Text>
-          </TouchableOpacity>
-        )}
+        
       </View>
     </ParallaxScrollView>
   );
