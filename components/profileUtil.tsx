@@ -9,22 +9,25 @@ type ProfileBarProps = {
   onAddEvent?: () => void; 
   onRemoveEvent?: () => void; 
   onEditEvent?: () => void; 
+  onSummary?: () => void;
   selectedEvent?: string | null; 
   events: any[]; 
 };
-
 export const ProfileBar: React.FC<ProfileBarProps> = ({
   name,
   onProfilePress,
   onAddEvent,
   onRemoveEvent,
   onEditEvent,
+  onSummary,
   selectedEvent,
   events,
 }) => {
+  
   const { portraitUri, setPortraitUri } = useProfile();
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [deleteEventVisible, setDeleteEventVisible] = useState(false);
+  const [summaryVisible, setSummaryVisible] = useState(false);
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -94,7 +97,7 @@ export const ProfileBar: React.FC<ProfileBarProps> = ({
               style={styles.dropdownItem}
               onPress={() => {
                 setDropdownVisible(false);
-                // assign button press action here 
+                if (onSummary) onSummary();
               }}
             >
               <Text style={styles.dropdownText}>Summary</Text>

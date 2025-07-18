@@ -19,6 +19,7 @@ import { createEvent } from '@/storage/events_database';
 import { DeleteEvent } from '@/components/deleteEvent';
 import { EditEvent } from '@/components/editEvent';
 import { EditEventForm } from '@/components/editEvent';
+import { SummaryEvent } from '@/components/summaryEvent';
 
 export default function HomeScreen() {
 	const [leftOpen, setLeftOpen] = useState(false);
@@ -28,9 +29,10 @@ export default function HomeScreen() {
 	const [deleteEventVisible, setDeleteEventVisible] = useState(false);
 	const [eventList, setEventList] = useState(events); 
 	const [editEventFormVisible, setEditEventFormVisible] = useState(false);
-const [eventToEdit, setEventToEdit] = useState<Event | null>(null);
+	const [eventToEdit, setEventToEdit] = useState<Event | null>(null);
 	const [selectEditEventVisible, setSelectEditEventVisible] = useState(false);
 	const colorScheme = useColorScheme() ?? 'light';
+	const [summaryVisible, setSummaryVisible] = useState(false);
 
 	// Temp friends list
 	const router = useRouter();
@@ -227,6 +229,7 @@ const [eventToEdit, setEventToEdit] = useState<Event | null>(null);
 				  onEditEvent={() => setSelectEditEventVisible(true)}
 				  selectedEvent={selectedEvent}
 				  events={eventList}
+				  onSummary={() => setSummaryVisible(true)}
                 />
 
 								{/* Event List */}
@@ -312,6 +315,12 @@ const [eventToEdit, setEventToEdit] = useState<Event | null>(null);
 							setEventToEdit(null);
 						}}
 						friends ={friendsList}
+					/>
+					<SummaryEvent
+						visible={summaryVisible}
+						events={eventList}
+						currentUserId={users[0].id}
+						onClose={() => setSummaryVisible(false)}
 					/>
 				</Animated.View>
 			</GestureDetector>
