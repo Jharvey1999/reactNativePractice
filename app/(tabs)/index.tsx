@@ -7,16 +7,18 @@ import { useRouter } from 'expo-router';
 import { sharedStyles } from '@/components/styles/styles';
 import { EventList } from '@/components/EventList';
 import { events } from '@/storage/events_database';
+import { Event } from '@/storage/events_database';
 import { users } from '@/storage/user_database';
 import { friendsList } from '@/storage/friendsList';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { useSharedValue, useAnimatedStyle } from 'react-native-reanimated';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { ThemedText } from '@/components/ThemedText';
 import { ProfileBar } from '@/components/profileUtil';
 import { AddEvent } from '@/components/addEvent';
 import { createEvent } from '@/storage/events_database';
 import { DeleteEvent } from '@/components/deleteEvent';
+import { EditEvent } from '@/components/editEvent';
+import { EditEventForm } from '@/components/editEvent';
 
 export default function HomeScreen() {
 	const [leftOpen, setLeftOpen] = useState(false);
@@ -24,8 +26,10 @@ export default function HomeScreen() {
 	const [selectedEvent, setSelectedEvent] = useState<string | null>(null);
 	const [addEventVisible, setAddEventVisible] = useState(false);
 	const [deleteEventVisible, setDeleteEventVisible] = useState(false);
-	const [eventList, setEventList] = useState(events); // Use local state for events
-
+	const [eventList, setEventList] = useState(events); 
+	const [editEventFormVisible, setEditEventFormVisible] = useState(false);
+const [eventToEdit, setEventToEdit] = useState<Event | null>(null);
+	const [selectEditEventVisible, setSelectEditEventVisible] = useState(false);
 	const colorScheme = useColorScheme() ?? 'light';
 
 	// Temp friends list
@@ -219,7 +223,10 @@ export default function HomeScreen() {
                   name="Anon"
                   onProfilePress={() => {/* handle press */}}
                   onAddEvent={() => setAddEventVisible(true)}
-                  onRemoveEvent={() => setDeleteEventVisible(true)} // <-- Add this line
+                  onRemoveEvent={() => setDeleteEventVisible(true)} 
+				  onEditEvent={() => setSelectEditEventVisible(true)}
+				  selectedEvent={selectedEvent}
+				  events={eventList}
                 />
 
 								{/* Event List */}
@@ -275,6 +282,36 @@ export default function HomeScreen() {
 						events={eventList}
 						onClose={() => setDeleteEventVisible(false)}
 						onRemove={handleRemoveEvent}
+					/>
+					<EditEvent
+						visible={selectEditEventVisible}
+						events={eventList}
+						onClose={() => setSelectEditEventVisible(false)}
+						onSelect={(event: Event) => {
+							setEventToEdit(event);
+							setEditEventFormVisible(true);
+							setSelectEditEventVisible(false);
+						}}
+					/>
+
+					{/* Edit Event Form */}
+					<EditEventForm
+						visible={editEventFormVisible}
+						event={eventToEdit}
+						onClose={() => setEditEventFormVisible(false)}
+						onSave={eventData => {
+							if (!eventToEdit) return;
+							setEventList(prev =>
+								prev.map(ev =>
+									ev.id === eventToEdit.id
+										? { ...ev, ...eventData, id: ev.id }
+										: ev
+								)
+							);
+							setEditEventFormVisible(false);
+							setEventToEdit(null);
+						}}
+						friends ={friendsList}
 					/>
 				</Animated.View>
 			</GestureDetector>

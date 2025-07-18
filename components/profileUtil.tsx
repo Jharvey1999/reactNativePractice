@@ -6,8 +6,11 @@ import { useProfile } from './profileContext';
 type ProfileBarProps = {
   name: string;
   onProfilePress?: () => void;
-  onAddEvent?: () => void; // Add this
-  onRemoveEvent?: () => void; // Add this
+  onAddEvent?: () => void; 
+  onRemoveEvent?: () => void; 
+  onEditEvent?: () => void; 
+  selectedEvent?: string | null; 
+  events: any[]; 
 };
 
 export const ProfileBar: React.FC<ProfileBarProps> = ({
@@ -15,6 +18,9 @@ export const ProfileBar: React.FC<ProfileBarProps> = ({
   onProfilePress,
   onAddEvent,
   onRemoveEvent,
+  onEditEvent,
+  selectedEvent,
+  events,
 }) => {
   const { portraitUri, setPortraitUri } = useProfile();
   const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -63,16 +69,16 @@ export const ProfileBar: React.FC<ProfileBarProps> = ({
                 if (onAddEvent) onAddEvent();
               }}
             >
-              <Text style={styles.dropdownText}>Add Event</Text>
+              <Text style={styles.dropdownText}>Add</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.dropdownItem}
               onPress={() => {
                 setDropdownVisible(false);
-                // assign button press action here 
+                if (onEditEvent) onEditEvent(); // undefined check before call
               }}
             >
-              <Text style={styles.dropdownText}>Add Manual Event</Text>
+              <Text style={styles.dropdownText}>Edit</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.dropdownItem}
@@ -82,7 +88,7 @@ export const ProfileBar: React.FC<ProfileBarProps> = ({
                 else setDeleteEventVisible(true);
               }}
             >
-              <Text style={styles.dropdownText}>Remove Event</Text>
+              <Text style={styles.dropdownText}>Delete</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.dropdownItem}
@@ -91,7 +97,7 @@ export const ProfileBar: React.FC<ProfileBarProps> = ({
                 // assign button press action here 
               }}
             >
-              <Text style={styles.dropdownText}>Events Stats</Text>
+              <Text style={styles.dropdownText}>Summary</Text>
             </TouchableOpacity>
           </View>
         )}

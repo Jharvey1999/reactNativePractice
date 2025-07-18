@@ -1,47 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { Event } from '@/storage/events_database';
 import { users } from '@/storage/user_database';
 
-type AddEventProps = {
+type EditEventFormProps = {
   visible: boolean;
+  event: Event | null;
   onClose: () => void;
-  onAdd: (eventData: { name: string; date: string; contributions: { id: string; contribution: number }[] }) => void;
-  currentUserId: string;
-  friends: { id: string; name: string }[];
-  initialData?: {
-    name: string;
-    date: string;
-    contributions: { id: string; name: string; contribution: number }[];
-  };
+  onSave: (eventData: { name: string; date: string; contributions: { id: string; name: string; contribution: number }[] }) => void;
+  friends?: { id: string; name: string }[]; // Optional, for adding friends
 };
 
-export const AddEvent: React.FC<AddEventProps> = ({
-  visible, onClose, onAdd, currentUserId, friends, initialData
+export const EditEventForm: React.FC<EditEventFormProps> = ({
+  visible,
+  event,
+  onClose,
+  onSave,
+  friends = [],
 }) => {
-  const currentUser = users.find(u => u.id === currentUserId);
-  const [name, setName] = useState(initialData?.name || '');
-  const [date, setDate] = useState(initialData?.date || '');
+  if (!visible || !event) return null;
+
+  // Pre-populate fields from event
+  const [name, setName] = useState(event.name);
+  const [date, setDate] = useState(event.date);
   const [contributions, setContributions] = useState(
-    initialData?.contributions ||
-    [{ id: currentUserId, name: users.find(u => u.id === currentUserId)?.name || '', contribution: 0 }]
+    event.users.map(u => ({
+      id: u.id,
+      name: u.name,
+      contribution: u.contribution,
+    }))
   );
-  const [availableFriends, setAvailableFriends] = useState(friends);
   const [dateError, setDateError] = useState('');
 
-  if (!visible) return null;
+  // Friends not already in contributions
+  const availableFriends = useMemo(
+    () => friends.filter(f => !contributions.some(c => c.id === f.id)),
+    [friends, contributions]
+  );
 
+  // Add friend to contributions
   const addFriend = (friend: { id: string; name: string }) => {
     setContributions([...contributions, { id: friend.id, name: friend.name, contribution: 0 }]);
-    setAvailableFriends(availableFriends.filter(f => f.id !== friend.id));
   };
 
   // Helper to format date to yyyy-mm-dd
   function formatDate(input: string): string {
-    // Accepts yyyy-mm-dd, dd-mm-yyyy, mm/dd/yyyy, etc.
     let cleaned = input.replace(/[^\d]/g, '');
     if (cleaned.length === 8) {
-      // Try to detect format
-      // If input is ddmmyyyy or mmddyyyy, convert to yyyy-mm-dd
       let yyyy, mm, dd;
       if (/^\d{4}\d{2}\d{2}$/.test(cleaned)) {
         yyyy = cleaned.slice(0, 4);
@@ -52,7 +57,7 @@ export const AddEvent: React.FC<AddEventProps> = ({
         mm = cleaned.slice(2, 4);
         yyyy = cleaned.slice(4, 8);
       } else {
-        return input; // fallback
+        return input;
       }
       return `${yyyy}-${mm}-${dd}`;
     }
@@ -60,7 +65,6 @@ export const AddEvent: React.FC<AddEventProps> = ({
   }
 
   function isValidDate(str: string) {
-    // Checks for yyyy-mm-dd format and valid date
     const regex = /^\d{4}-\d{2}-\d{2}$/;
     if (!regex.test(str)) return false;
     const d = new Date(str);
@@ -76,7 +80,7 @@ export const AddEvent: React.FC<AddEventProps> = ({
         bottom: 0,
         width: 320,
         backgroundColor: '#fff',
-        zIndex: 20,
+        zIndex: 40,
         padding: 24,
         paddingBottom: 40,
         shadowColor: '#000',
@@ -85,7 +89,7 @@ export const AddEvent: React.FC<AddEventProps> = ({
         elevation: 8,
       }}
     >
-      <Text style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 16 }}>Add Event</Text>
+      <Text style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 16 }}>Edit Event</Text>
       <ScrollView>
         <Text style={{ marginBottom: 4 }}>Event Name</Text>
         <TextInput
@@ -153,22 +157,69 @@ export const AddEvent: React.FC<AddEventProps> = ({
               setDateError('Please enter a valid date in YYYY-MM-DD format.');
               return;
             }
-            onAdd({
+            onSave({
               name,
               date: formattedDate,
-              contributions: contributions.map(c => ({ id: c.id, contribution: c.contribution })),
+              contributions: contributions.map(c => ({ id: c.id, name: c.name, contribution: c.contribution })),
             });
-            setName('');
-            setDate('');
-            setDateError('');
-            setContributions(currentUser ? [{ id: currentUser.id, name: currentUser.name, contribution: 0 }] : []);
-            setAvailableFriends(friends);
             onClose();
           }}
         >
-          <Text style={{ color: '#17851bff', fontWeight: 'bold' }}>Add</Text>
+          <Text style={{ color: '#17851bff', fontWeight: 'bold' }}>Save</Text>
         </TouchableOpacity>
       </View>
+    </View>
+  );
+};
+
+type EditEventProps = {
+  visible: boolean;
+  events: Event[];
+  onClose: () => void;
+  onSelect: (event: Event) => void;
+};
+
+export const EditEvent: React.FC<EditEventProps> = ({ visible, events, onClose, onSelect }) => {
+  if (!visible) return null;
+
+  return (
+    <View
+      style={{
+        position: 'absolute',
+        top: 80,
+        right: 0,
+        width: 320,
+        backgroundColor: '#fff',
+        zIndex: 30,
+        padding: 24,
+        borderRadius: 8,
+        shadowColor: '#000',
+        shadowOpacity: 0.2,
+        shadowRadius: 8,
+        elevation: 8,
+      }}
+    >
+      <Text style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 16 }}>Select Event to Edit</Text>
+      <ScrollView>
+        {events.map(event => (
+          <TouchableOpacity
+            key={event.id}
+            style={{ padding: 12, borderBottomWidth: 1, borderBottomColor: '#eee' }}
+            onPress={() => {
+              onSelect(event);
+              onClose();
+            }}
+          >
+            <Text>{event.name} ({event.date})</Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+      <TouchableOpacity
+        style={{ marginTop: 16, alignSelf: 'flex-end' }}
+        onPress={onClose}
+      >
+        <Text style={{ color: 'red', fontWeight: 'bold' }}>Cancel</Text>
+      </TouchableOpacity>
     </View>
   );
 };
