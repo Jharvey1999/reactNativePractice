@@ -4,21 +4,27 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { useRouter } from 'expo-router';
 import { sharedStyles } from '@/components/styles/styles';
 import { LeftMenuColumn } from '@/components/leftColumnMenu';
+import { friendsList } from '@/storage/friendsList';
 
-export default function ExpensesScreen() {
+export default function FriendsScreen() {
   const [leftOpen, setLeftOpen] = useState(false);
   const [rightOpen, setRightOpen] = useState(false);
   const colorScheme = useColorScheme() ?? 'light';
-  const router = useRouter();
 
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#30c035ff', dark: '#17851bff' }}
       headerImage={
-        <View style={{ paddingTop: 0, marginTop: 0, alignItems: 'center', justifyContent: 'flex-start' }}>
+        <View
+          style={{
+            paddingTop: 0,
+            marginTop: 0,
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+          }}
+        >
           <Text
             style={{
               fontSize: Platform.OS === 'web' ? 58 : 30,
@@ -27,7 +33,7 @@ export default function ExpensesScreen() {
               marginTop: 0,
             }}
           >
-            Expenses
+            Friends
           </Text>
         </View>
       }
@@ -45,20 +51,36 @@ export default function ExpensesScreen() {
             !rightOpen && { paddingRight: 0 },
           ]}
         >
-          {/* Main content */}
+          {/* Friends Header */}
           <ThemedView style={sharedStyles.titleContainer}>
-            <ThemedText type="title">Expenses Page</ThemedText>
+            <ThemedText type="title">Friends</ThemedText>
           </ThemedView>
+          {/* Friends List */}
           <ThemedView style={sharedStyles.stepContainer}>
-            <ThemedText type="subtitle">Your Expenses</ThemedText>
-            <ThemedText>
-              {/* Expenses List */}
-              This is where your expenses will be listed.
-            </ThemedText>
+            {friendsList.map(friend => (
+              <TouchableOpacity
+                key={friend.id}
+                style={[
+                  sharedStyles.leftTabButton,
+                  {
+                    backgroundColor: colorScheme === 'dark' ? '#222' : '#ccc',
+                    marginBottom: 10,
+                  },
+                ]}
+                onPress={() => {
+                  // You can add navigation or actions here
+                  alert(`Friend: ${friend.name}`);
+                }}
+              >
+                <ThemedText style={{ color: colorScheme === 'dark' ? 'white' : 'black' }}>
+                  {friend.name}
+                </ThemedText>
+              </TouchableOpacity>
+            ))}
           </ThemedView>
         </View>
 
-        {/* Left Expand Tab */}
+        {/* Left Expand/Collapse Tab */}
         {!leftOpen && (
           <TouchableOpacity
             style={[sharedStyles.tab, { left: 0 }]}

@@ -20,6 +20,7 @@ import { DeleteEvent } from '@/components/deleteEvent';
 import { EditEvent } from '@/components/editEvent';
 import { EditEventForm } from '@/components/editEvent';
 import { SummaryEvent } from '@/components/summaryEvent';
+import { LeftMenuColumn } from '@/components/leftColumnMenu';
 
 export default function HomeScreen() {
 	const [leftOpen, setLeftOpen] = useState(false);
@@ -82,135 +83,8 @@ export default function HomeScreen() {
 						}
 					>
 						<View style={sharedStyles.row}>
-							{/* Left Collapse Tab */}
-							{leftOpen && (
-								<TouchableOpacity
-									style={[sharedStyles.tab, { left: 0 }]}
-									onPress={() => setLeftOpen(false)}
-									activeOpacity={0.8}
-								>
-									<Text
-										style={[
-											sharedStyles.expandButton,
-											{ color: colorScheme === 'dark' ? 'white' : 'black' },
-										]}
-									>
-										{'\u2261'}
-									</Text>
-								</TouchableOpacity>
-							)}
-
-							{/* Left Column */}
-							{leftOpen && (
-								<View
-									style={[
-										sharedStyles.col1,
-										{
-											position: 'absolute',
-											top: 0,
-											left: 0,
-											bottom: 0,
-											width: '100%',
-											backgroundColor:
-												colorScheme === 'dark' ? 'black' : 'white',
-											zIndex: 10,
-										},
-									]}
-								>
-									<ScrollView contentContainerStyle={sharedStyles.leftContent}>
-										{/* Navigation Tabs */}
-										<TouchableOpacity
-											style={[
-												sharedStyles.leftTabButton,
-												{
-													backgroundColor:
-														colorScheme === 'dark' ? '#222' : '#ccc',
-												},
-											]}
-											onPress={() => {
-												// router.push('/'); // Uncomment to navigate to Home
-											}}
-										>
-											<Text
-												style={[
-													sharedStyles.leftTabText,
-													{ color: colorScheme === 'dark' ? 'white' : 'black' },
-												]}
-											>
-												Home
-											</Text>
-										</TouchableOpacity>
-										<TouchableOpacity
-											style={[
-												sharedStyles.leftTabButton,
-												{
-													backgroundColor:
-														colorScheme === 'dark' ? '#222' : '#ccc',
-												},
-											]}
-											onPress={() => {
-												router.push('/expenses'); // navigate to Expenses
-											}}
-										>
-											<Text
-												style={[
-													sharedStyles.leftTabText,
-													{ color: colorScheme === 'dark' ? 'white' : 'black' },
-												]}
-											>
-												Expenses
-											</Text>
-										</TouchableOpacity>
-
-										{/* Friends Header */}
-										<Text
-											style={[
-												sharedStyles.friendsHeader,
-												{
-													color:
-														colorScheme === 'dark'
-															? '#17851bff'
-															: '#30c035ff',
-												},
-											]}
-										>
-											Friends
-										</Text>
-
-										{/* Friends List */}
-										{friendsList.map((friend) => (
-											<View key={friend.id} style={sharedStyles.friendItem}>
-												<Text
-													style={[
-														sharedStyles.friendText,
-														{ color: colorScheme === 'dark' ? 'white' : 'black' },
-													]}
-												>
-													{friend.name}
-												</Text>
-											</View>
-										))}
-									</ScrollView>
-									{/* Collapse button */}
-									<TouchableOpacity
-										style={[
-											sharedStyles.tab,
-											{ left: 0, position: 'absolute', top: 0 },
-										]}
-										onPress={() => setLeftOpen(false)}
-										activeOpacity={0.8}
-									>
-										<Text
-											style={[
-												sharedStyles.expandButton,
-												{ color: colorScheme === 'dark' ? 'white' : 'black' },
-											]}
-										>
-											{'\u2261'}
-										</Text>
-									</TouchableOpacity>
-								</View>
-							)}
+							{/* Left Column Menu (shared) */}
+							<LeftMenuColumn leftOpen={leftOpen} setLeftOpen={setLeftOpen} />
 
 							{/* MAIN Column */}
 							<View
@@ -242,22 +116,36 @@ export default function HomeScreen() {
 
 								{/* Left Expand Tab */}
 								{!leftOpen && (
-									<>
-										<TouchableOpacity
-											style={[sharedStyles.tab, { left: 0 }]}
-											onPress={() => setLeftOpen(true)}
-											activeOpacity={0.8}
+									<TouchableOpacity
+										style={[sharedStyles.tab, { left: 0 }]}
+										onPress={() => setLeftOpen(true)}
+										activeOpacity={0.8}
+									>
+										<Text
+											style={[
+												sharedStyles.expandButton,
+												{ color: colorScheme === 'dark' ? 'white' : 'black' },
+											]}
 										>
-											<Text
-												style={[
-													sharedStyles.expandButton,
-													{ color: colorScheme === 'dark' ? 'white' : 'black' },
-												]}
-											>
-												{'\u2261'}
-											</Text>
-										</TouchableOpacity>
-									</>
+											{'\u2261'}
+										</Text>
+									</TouchableOpacity>
+								)}
+								{leftOpen && (
+									<TouchableOpacity
+										style={[sharedStyles.tab, { left: 0, zIndex: 20 }]}
+										onPress={() => setLeftOpen(false)}
+										activeOpacity={0.8}
+									>
+										<Text
+											style={[
+												sharedStyles.expandButton,
+												{ color: colorScheme === 'dark' ? 'white' : 'black' },
+											]}
+										>
+											{'\u2261'}
+										</Text>
+									</TouchableOpacity>
 								)}
 							</View>
 						</View>

@@ -38,6 +38,7 @@ export const sharedStyles = StyleSheet.create({
     position: 'relative',
   },
   col1: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     minWidth: 0,
