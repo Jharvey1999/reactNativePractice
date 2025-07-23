@@ -115,3 +115,69 @@ export const sharedStyles = StyleSheet.create({
     overflow: 'hidden',
   },
 });
+
+export const friendsScreenStyles = StyleSheet.create({
+  headerText: {
+    fontSize: Platform.OS === 'web' ? 58 : 30,
+    color: '#222', // override in component for dark mode
+    textAlign: 'center',
+    marginTop: 0,
+  },
+  rightColumn: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    width: 320,
+    backgroundColor: '#fff',
+    zIndex: 20,
+    padding: 24,
+    borderLeftWidth: 1,
+    borderLeftColor: '#ccc',
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 8,
+  },
+  rightColumnShared: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    width: 320,
+    backgroundColor: '#f9f9f9',
+    zIndex: 30,
+    padding: 24,
+    borderLeftWidth: 1,
+    borderLeftColor: '#ccc',
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 12,
+  },
+  collapseButton: {
+    position: 'absolute',
+    top: 12,
+    right: 12,
+    zIndex: 30,
+    padding: 4,
+  },
+  collapseButtonShared: {
+    position: 'absolute',
+    top: 12,
+    right: 12,
+    zIndex: 40,
+    padding: 4,
+  },
+  friendName: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    marginBottom: 16,
+  },
+  sharedEventItem: {
+    marginBottom: 12,
+  },
+  sharedEventTitle: {
+    fontWeight: 'bold',
+  },
+});

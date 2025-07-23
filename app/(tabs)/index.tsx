@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Text, Platform, View, TouchableOpacity } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import { sharedStyles } from '@/components/styles/styles';
 import { EventList } from '@/components/EventList';

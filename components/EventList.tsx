@@ -119,7 +119,7 @@ export function EventList({ events, selectedEvent, setSelectedEvent }: Props) {
                 style={{ marginTop: 12, alignSelf: 'flex-end' }}
                 onPress={() => setSelectedEvent(null)}
               >
-                <Text style={{ color: '#17851bff', fontWeight: 'bold' }}>Close</Text>
+                <Text style={{ color: '#000000ff', fontWeight: 'bold' }}>Close</Text>
               </TouchableOpacity>
             </View>
           )}
