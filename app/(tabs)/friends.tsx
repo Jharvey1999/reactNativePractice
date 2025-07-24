@@ -4,13 +4,17 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { sharedStyles, friendsScreenStyles } from '@/components/styles/styles';import { LeftMenuColumn } from '@/components/leftColumnMenu';
+import { sharedStyles, friendsScreenStyles } from '@/components/styles/styles';import { LeftMenuColumn } from '@/components/LeftColumnMenu';
 import { friendsList } from '@/storage/friendsList';
 import { calculateRelationship } from '@/util/calcRelationship';
 import {getSharedEvents} from '@/util/sharedEvents';
 import { events } from '@/storage/events_database';
 import { users } from '@/storage/user_database';
 import { EventList } from '@/components/EventList';
+import { UniversalHeader } from '@/components/UniversalHeader';
+import { AddFriend } from '@/components/AddFriend';
+import { addFriend } from '@/util/addFriends'; 
+import { deleteFriend } from '@/util/deleteFriend';
 
 export default function FriendsScreen() {
   const [leftOpen, setLeftOpen] = useState(false);
@@ -19,6 +23,9 @@ export default function FriendsScreen() {
   const [selectedSharedEvent, setSelectedSharedEvent] = useState<string | null>(null);
   const colorScheme = useColorScheme() ?? 'light';
   const [showSharedEvents, setShowSharedEvents] = useState(false);
+  const [addFriendVisible, setAddFriendVisible] = useState(false);
+  const [deleteMode, setDeleteMode] = useState(false);
+  const [friendsToDelete, setFriendsToDelete] = useState<string[]>([]);
   const sharedEvents = selectedFriend
     ? getSharedEvents(events, users[0].id, selectedFriend.id)
     : [];
@@ -29,30 +36,16 @@ export default function FriendsScreen() {
     ? calculateRelationship(events, userId, friendId)
     : { youOwe: 0, youAreOwed: 0 };
 
+  // Update addFriend handler to open the slider
+  function handleAddFriend(friendData: { name: string }) {
+    addFriend(friendData.name);
+    setAddFriendVisible(false);
+  }
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#30c035ff', dark: '#17851bff' }}
-      headerImage={
-        <View
-          style={{
-            paddingTop: 0,
-            marginTop: 0,
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-          }}
-        >
-          <Text
-            style={{
-              fontSize: Platform.OS === 'web' ? 58 : 30,
-              color: colorScheme === 'dark' ? 'white' : 'black',
-              textAlign: 'center',
-              marginTop: 0,
-            }}
-          >
-            Friends
-          </Text>
-        </View>
-      }
+      headerImage={<UniversalHeader title="Friends" />}
     >
       <View style={sharedStyles.row}>
         {/* Left Column Menu (shared) */}
@@ -67,78 +60,138 @@ export default function FriendsScreen() {
             !rightOpen && { paddingRight: 0 },
           ]}
         >
+          {/* Left HAMBURGER Expand Tab */}
+      {!leftOpen && !rightOpen && (
+        <TouchableOpacity
+          style={[sharedStyles.tab, { left: 0 , zIndex: 999 }]} // temp zIndex to try and get hamburger menu to show
+          onPress={() => setLeftOpen(true)}
+          activeOpacity={0.8}
+        >
+          <Text
+            style={[
+              sharedStyles.expandHamburgerButton,
+              { color: colorScheme === 'dark' ? 'white' : 'black' },
+            ]}
+          >
+            {'\u2261'}
+          </Text>
+        </TouchableOpacity>
+      )}
+      {leftOpen && (
+        <TouchableOpacity
+          style={[sharedStyles.tab, { left: 0, zIndex: 20 }]}
+          onPress={() => setLeftOpen(false)}
+          activeOpacity={0.8}
+        >
+          <Text
+            style={[
+              sharedStyles.expandHamburgerButton,
+              { color: colorScheme === 'dark' ? 'white' : 'black' },
+            ]}
+          >
+            {'\u2261'}
+          </Text>
+        </TouchableOpacity>
+      )}
+
+          {/* Main Content */}
           {/* Friends Header */}
-          <ThemedView style={sharedStyles.titleContainer}>
+          <ThemedView style={[sharedStyles.titleContainer, { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }]}>
             <ThemedText type="title">Friends</ThemedText>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              {/* Add Friend Button */}
+              <TouchableOpacity
+                style={friendsScreenStyles.addFriendButton}
+                onPress={() => setAddFriendVisible(true)}
+              >
+                <Text style={friendsScreenStyles.addFriendButtonText}>Add Friend</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[friendsScreenStyles.addFriendButton, { backgroundColor: 'red', marginLeft: 8 }]}
+                onPress={() => {
+                  if (deleteMode && friendsToDelete.length > 0) {
+                    friendsToDelete.forEach(id => deleteFriend(id));
+                    setFriendsToDelete([]);
+                  }
+                  setDeleteMode(!deleteMode);
+                }}
+              >
+                <Text style={[friendsScreenStyles.addFriendButtonText, { color: 'white' }]}>Remove Friend</Text>
+              </TouchableOpacity>
+            </View>
           </ThemedView>
 
           {/* Friends List */}
           <ThemedView style={sharedStyles.stepContainer}>
-            {friendsList.map(friend => (
-              <TouchableOpacity
-                key={friend.id}
-                style={[
-                  sharedStyles.leftTabButton,
-                  {
-                    backgroundColor: colorScheme === 'dark' ? '#222' : '#ccc',
-                    marginBottom: 10,
-                  },
-                ]}
-                onPress={() => {
-                  setSelectedFriend(friend);
-                  setRightOpen(true);
-                }}
-              >
-                <ThemedText style={{ color: colorScheme === 'dark' ? 'white' : 'black' }}>
-                  {friend.name}
-                </ThemedText>
-              </TouchableOpacity>
-            ))}
+            {friendsList.map(friend => {
+              const selected = friendsToDelete.includes(friend.id);
+              return (
+                <View key={friend.id} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <TouchableOpacity
+                    style={[
+                      sharedStyles.leftTabButton,
+                      {
+                        backgroundColor: colorScheme === 'dark' ? '#222' : '#ccc',
+                        marginBottom: 10,
+                        flex: 1,
+                      },
+                    ]}
+                    onPress={() => {
+                      if (!deleteMode) {
+                        setSelectedFriend(friend);
+                        setRightOpen(true);
+                      }
+                    }}
+                    disabled={deleteMode}
+                  >
+                    <ThemedText style={{ color: colorScheme === 'dark' ? 'white' : 'black' }}>
+                      {friend.name}
+                    </ThemedText>
+                  </TouchableOpacity>
+                  {deleteMode && (
+                    <TouchableOpacity
+                      style={[
+                        sharedStyles.deleteCheckbox,
+                        {
+                          borderColor: selected ? 'red' : '#ccc',
+                          backgroundColor: selected ? '#ffeaea' : 'white',
+                        },
+                      ]}
+                      onPress={() => {
+                        setFriendsToDelete(selected
+                          ? friendsToDelete.filter(id => id !== friend.id)
+                          : [...friendsToDelete, friend.id]
+                        );
+                      }}
+                    >
+                      {selected && (
+                        <Text style={{ color: 'red', fontWeight: 'bold', fontSize: 20 }}>✗</Text>
+                      )}
+                    </TouchableOpacity>
+                  )}
+                </View>
+              );
+            })}
           </ThemedView>
         </View>
 
-        {/* Left Expand/Collapse Tab */}
-        {!leftOpen && !rightOpen && (
-          <TouchableOpacity
-            style={[sharedStyles.tab, { left: 0 }]}
-            onPress={() => setLeftOpen(true)}
-            activeOpacity={0.8}
-          >
-            <Text
-              style={[
-                sharedStyles.expandButton,
-                { color: colorScheme === 'dark' ? 'white' : 'black' },
-              ]}
-            >
-              {'\u2261'}
-            </Text>
-          </TouchableOpacity>
-        )}
-        {leftOpen && (
-          <TouchableOpacity
-            style={[sharedStyles.tab, { left: 0, zIndex: 20 }]}
-            onPress={() => setLeftOpen(false)}
-            activeOpacity={0.8}
-          >
-            <Text
-              style={[
-                sharedStyles.expandButton,
-                { color: colorScheme === 'dark' ? 'white' : 'black' },
-              ]}
-            >
-              {'\u2261'}
-            </Text>
-          </TouchableOpacity>
+        {/* Add Friend Slider Column */}
+        {addFriendVisible && (
+          <AddFriend
+            visible={addFriendVisible}
+            onClose={() => setAddFriendVisible(false)}
+            onAdd={handleAddFriend}
+          />
         )}
 
         {/* Right Expand/Collapse Tab */}
         {rightOpen && (
           <View
-            style={friendsScreenStyles.rightColumn}
+            style={sharedStyles.rightColumn}
           >
-            {/* Collapse Button */}
+            {/* Right Collapse Button */}
             <TouchableOpacity
-              style={friendsScreenStyles.collapseButton}
+              style={sharedStyles.collapseButton}
               onPress={() => setRightOpen(false)}
             >
               <Text style={{ fontSize: 24 }}>{'\u25B6'}</Text>
@@ -162,9 +215,9 @@ export default function FriendsScreen() {
         )}
       </View>
       {showSharedEvents && (
-        <View style={friendsScreenStyles.rightColumnShared}>
+        <View style={sharedStyles.rightColumnShared}>
           <TouchableOpacity
-            style={friendsScreenStyles.collapseButtonShared}
+            style={sharedStyles.collapseButtonShared}
             onPress={() => setShowSharedEvents(false)}
           >
             <Text style={{ fontSize: 24 }}>{'\u25B6'}</Text>
@@ -181,6 +234,8 @@ export default function FriendsScreen() {
           </ScrollView>
         </View>
       )}
+
+      
     </ParallaxScrollView>
   );
 }

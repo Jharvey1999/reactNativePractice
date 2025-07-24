@@ -110,7 +110,7 @@ export function LeftMenuColumn({ leftOpen, setLeftOpen }: { leftOpen: boolean, s
       >
         <Text
           style={[
-            sharedStyles.expandButton,
+            sharedStyles.expandHamburgerButton,
             { color: colorScheme === 'dark' ? 'white' : 'black' },
           ]}
         >

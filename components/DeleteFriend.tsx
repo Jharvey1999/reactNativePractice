@@ -2,36 +2,35 @@ import React from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { sharedStyles } from '@/components/styles/styles';
 
-type Event = {
+type Friend = {
   id: string;
   name: string;
-  date: string;
 };
 
-type DeleteEventProps = {
+type DeleteFriendProps = {
   visible: boolean;
-  events: Event[];
+  friends: Friend[];
   onClose: () => void;
-  onRemove: (eventId: string) => void; 
+  onRemove: (friendId: string) => void; // util called in tab
 };
 
-export const DeleteEvent: React.FC<DeleteEventProps> = ({ visible, events, onClose, onRemove }) => {
+export const DeleteFriend: React.FC<DeleteFriendProps> = ({ visible, friends, onClose, onRemove }) => {
   if (!visible) return null;
 
   return (
     <View style={sharedStyles.rightColumn}>
-      <Text style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 16 }}>Remove Event</Text>
+      <Text style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 16 }}>Remove Friend</Text>
       <ScrollView>
-        {events.map(event => (
+        {friends.map(friend => (
           <TouchableOpacity
-            key={event.id}
+            key={friend.id}
             style={{ padding: 12, borderBottomWidth: 1, borderBottomColor: '#eee' }}
             onPress={() => {
-              onRemove(event.id); 
+              onRemove(friend.id); // util called in tab
               onClose();
             }}
           >
-            <Text>{event.name} ({event.date})</Text>
+            <Text>{friend.name}</Text>
           </TouchableOpacity>
         ))}
       </ScrollView>

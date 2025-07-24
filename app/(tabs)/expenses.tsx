@@ -6,7 +6,8 @@ import { ThemedView } from '@/components/ThemedView';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { useRouter } from 'expo-router';
 import { sharedStyles } from '@/components/styles/styles';
-import { LeftMenuColumn } from '@/components/leftColumnMenu';
+import { LeftMenuColumn } from '@/components/LeftColumnMenu';
+import { UniversalHeader } from '@/components/UniversalHeader';
 
 export default function ExpensesScreen() {
   const [leftOpen, setLeftOpen] = useState(false);
@@ -17,20 +18,7 @@ export default function ExpensesScreen() {
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#30c035ff', dark: '#17851bff' }}
-      headerImage={
-        <View style={{ paddingTop: 0, marginTop: 0, alignItems: 'center', justifyContent: 'flex-start' }}>
-          <Text
-            style={{
-              fontSize: Platform.OS === 'web' ? 58 : 30,
-              color: colorScheme === 'dark' ? 'white' : 'black',
-              textAlign: 'center',
-              marginTop: 0,
-            }}
-          >
-            Expenses
-          </Text>
-        </View>
-      }
+      headerImage={<UniversalHeader title="Expenses" />}
     >
       <View style={sharedStyles.row}>
         {/* Left Column Menu (shared) */}
@@ -67,7 +55,7 @@ export default function ExpensesScreen() {
           >
             <Text
               style={[
-                sharedStyles.expandButton,
+                sharedStyles.expandHamburgerButton,
                 { color: colorScheme === 'dark' ? 'white' : 'black' },
               ]}
             >
@@ -83,7 +71,7 @@ export default function ExpensesScreen() {
           >
             <Text
               style={[
-                sharedStyles.expandButton,
+                sharedStyles.expandHamburgerButton,
                 { color: colorScheme === 'dark' ? 'white' : 'black' },
               ]}
             >

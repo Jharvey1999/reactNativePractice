@@ -13,6 +13,22 @@ export const sharedStyles = StyleSheet.create({
     justifyContent: 'center',
     padding: Platform.OS === 'web' ? 24 : 16,
   },
+  universalHeaderContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 0,
+    marginTop: 0,
+    backgroundColor: '#30c035ff', // default light, override for dark in component
+    width: '100%',
+    height: HEADER_HEIGHT,
+  },
+  universalHeaderText: {
+    fontSize: Platform.OS === 'web' ? 58 : 30,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: 0,
+    color: 'white', // default light, override for dark in component
+  },
   tab: {
     position: 'absolute',
     top: Platform.OS === 'web' ? 40 : 32,
@@ -21,9 +37,8 @@ export const sharedStyles = StyleSheet.create({
     height: Platform.OS === 'web' ? 52 : 25,
     justifyContent: 'center', // misalignment adjustment goes here
     alignItems: 'center',
-    // backgroundColor: set dynamically in component!
     borderRadius: Platform.OS === 'web' ? 26 : 22,
-    zIndex: 1,
+    zIndex: 100,
     opacity: 1,
     transform: [{ translateY: Platform.OS === 'web' ? -26 : -60}],
   },
@@ -63,7 +78,7 @@ export const sharedStyles = StyleSheet.create({
   stepContainer: {
     marginBottom: 8,
   },
-  expandButton: {
+  expandHamburgerButton: {
     fontWeight: 'bold',
     padding: 0,
     fontSize: Platform.OS === 'web' ? 28 : 22,
@@ -81,13 +96,6 @@ export const sharedStyles = StyleSheet.create({
   leftTabText: {
     fontWeight: 'bold',
     fontSize: Platform.OS === 'web' ? 18 : 16,
-  },
-  friendsHeader: {
-    marginTop: 16,
-    marginBottom: 8,
-    fontWeight: 'bold',
-    fontSize: Platform.OS === 'web' ? 20 : 18,
-    letterSpacing: 1,
   },
   friendItem: {
     paddingVertical: 6,
@@ -113,15 +121,6 @@ export const sharedStyles = StyleSheet.create({
     padding: 32,
     gap: 16,
     overflow: 'hidden',
-  },
-});
-
-export const friendsScreenStyles = StyleSheet.create({
-  headerText: {
-    fontSize: Platform.OS === 'web' ? 58 : 30,
-    color: '#222', // override in component for dark mode
-    textAlign: 'center',
-    marginTop: 0,
   },
   rightColumn: {
     position: 'absolute',
@@ -169,6 +168,19 @@ export const friendsScreenStyles = StyleSheet.create({
     zIndex: 40,
     padding: 4,
   },
+  deleteCheckbox: {
+    width: 32,
+    height: 32,
+    borderWidth: 2,
+    borderRadius: 6,
+    marginLeft: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white', // default, override in component if selected
+  }
+});
+
+export const friendsScreenStyles = StyleSheet.create({
   friendName: {
     fontWeight: 'bold',
     fontSize: 20,
@@ -179,5 +191,17 @@ export const friendsScreenStyles = StyleSheet.create({
   },
   sharedEventTitle: {
     fontWeight: 'bold',
+  },
+  addFriendButton: {
+    backgroundColor: '#30c035',
+    paddingVertical: 4,     // <-- reduce this value for less height
+    paddingHorizontal: 8,  // <-- reduce this value for less width
+    borderRadius: 6, 
+    marginLeft: 12, 
+  },
+  addFriendButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 10,         // <-- adjust font size as needed
   },
 });

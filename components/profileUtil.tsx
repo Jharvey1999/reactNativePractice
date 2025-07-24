@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { useProfile } from './profileContext';
+import { useProfile } from './ProfileContext';
 
 type ProfileBarProps = {
   name: string;

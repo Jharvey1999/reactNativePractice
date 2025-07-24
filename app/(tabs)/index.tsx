@@ -12,14 +12,14 @@ import { friendsList } from '@/storage/friendsList';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { useSharedValue, useAnimatedStyle } from 'react-native-reanimated';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { ProfileBar } from '@/components/profileUtil';
-import { AddEvent } from '@/components/addEvent';
+import { ProfileBar } from '@/components/ProfileUtil';
+import { AddEvent } from '@/components/AddEvent';
 import { createEvent } from '@/storage/events_database';
-import { DeleteEvent } from '@/components/deleteEvent';
-import { EditEvent } from '@/components/editEvent';
-import { EditEventForm } from '@/components/editEvent';
-import { SummaryEvent } from '@/components/summaryEvent';
-import { LeftMenuColumn } from '@/components/leftColumnMenu';
+import { DeleteEvent } from '@/components/DeleteEvent';
+import { EditEvent } from '@/components/EditEvent';
+import { EditEventForm } from '@/components/EditEvent';
+import { SummaryEvent } from '@/components/SummaryEvent';
+import { LeftMenuColumn } from '@/components/LeftColumnMenu';
 
 export default function HomeScreen() {
 	const [leftOpen, setLeftOpen] = useState(false);
@@ -122,7 +122,7 @@ export default function HomeScreen() {
 									>
 										<Text
 											style={[
-												sharedStyles.expandButton,
+												sharedStyles.expandHamburgerButton,
 												{ color: colorScheme === 'dark' ? 'white' : 'black' },
 											]}
 										>
@@ -138,7 +138,7 @@ export default function HomeScreen() {
 									>
 										<Text
 											style={[
-												sharedStyles.expandButton,
+												sharedStyles.expandHamburgerButton,
 												{ color: colorScheme === 'dark' ? 'white' : 'black' },
 											]}
 										>
