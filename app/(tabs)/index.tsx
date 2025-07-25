@@ -7,12 +7,11 @@ import { sharedStyles } from '@/components/styles/styles';
 import { EventList } from '@/components/EventList';
 import { events } from '@/storage/events_database';
 import { Event } from '@/storage/events_database';
-import { users } from '@/storage/user_database';
 import { friendsList } from '@/storage/friendsList';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { useSharedValue, useAnimatedStyle } from 'react-native-reanimated';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { ProfileBar } from '@/components/ProfileUtil';
+import { ProfileBar } from '@/util/profileUtil';
 import { AddEvent } from '@/components/AddEvent';
 import { createEvent } from '@/storage/events_database';
 import { DeleteEvent } from '@/components/DeleteEvent';
@@ -20,6 +19,7 @@ import { EditEvent } from '@/components/EditEvent';
 import { EditEventForm } from '@/components/EditEvent';
 import { SummaryEvent } from '@/components/SummaryEvent';
 import { LeftMenuColumn } from '@/components/LeftColumnMenu';
+import { useProfile } from '@/components/ProfileContext'; // <-- Add this import
 
 export default function HomeScreen() {
 	const [leftOpen, setLeftOpen] = useState(false);
@@ -34,8 +34,8 @@ export default function HomeScreen() {
 	const colorScheme = useColorScheme() ?? 'light';
 	const [summaryVisible, setSummaryVisible] = useState(false);
 
-	// Temp friends list
 	const router = useRouter();
+	const { user } = useProfile(); // <-- Get current user from context
 
 	// Zoom logic
 	const scale = useSharedValue(1);
@@ -95,7 +95,6 @@ export default function HomeScreen() {
 								]}
 							>
                 <ProfileBar
-                  name="Anon"
                   onProfilePress={() => {/* handle press */}}
                   onAddEvent={() => setAddEventVisible(true)}
                   onRemoveEvent={() => setDeleteEventVisible(true)} 
@@ -159,12 +158,12 @@ export default function HomeScreen() {
 								eventData.date,
 								eventData.name,
 								eventData.contributions,
-								users[0].id
+								user.id // <-- Use context user id
 							);
 							setEventList(prev => [...prev, newEvent]);
 							setAddEventVisible(false);
 						}}
-						currentUserId={users[0].id}
+						currentUserId={user.id} // <-- Use context user id
 						friends={friendsList}
 					/>
 					<DeleteEvent
@@ -206,7 +205,7 @@ export default function HomeScreen() {
 					<SummaryEvent
 						visible={summaryVisible}
 						events={eventList}
-						currentUserId={users[0].id}
+						currentUserId={user.id} // <-- Use context user id
 						onClose={() => setSummaryVisible(false)}
 					/>
 				</Animated.View>

@@ -1,5 +1,7 @@
 import { StyleSheet, Platform } from 'react-native';
 import { HEADER_HEIGHT } from './constants';
+import { useColorScheme } from '@/hooks/useColorScheme';
+
 
 export const sharedStyles = StyleSheet.create({
   title: {
@@ -53,11 +55,14 @@ export const sharedStyles = StyleSheet.create({
     position: 'relative',
   },
   col1: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    width: '100%',
+    height: '100%',
+    zIndex: 10,
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    minWidth: 0,
-    overflow: 'hidden',
   },
   col2: {
     justifyContent: 'flex-start',
@@ -177,7 +182,40 @@ export const sharedStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white', // default, override in component if selected
-  }
+  },
+  profilePortraitContainer: {
+    alignItems: 'center',
+    paddingTop: 24,
+  },
+  profileFieldLabel: {
+    fontWeight: 'bold',
+    marginBottom: 4,
+  },
+  profileTextInput: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    marginBottom: 12,
+    padding: 8,
+    borderRadius: 4,
+  },
+  profileTextInputPassword: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    marginBottom: 24,
+    padding: 8,
+    borderRadius: 4,
+  },
+  profileSaveButton: {
+    backgroundColor: '#30c035',
+    paddingVertical: 10,
+    borderRadius: 6,
+    alignItems: 'center',
+  },
+  profileSaveButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
 });
 
 export const friendsScreenStyles = StyleSheet.create({
@@ -203,5 +241,69 @@ export const friendsScreenStyles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     fontSize: 10,         // <-- adjust font size as needed
+  },
+});
+
+export const profileBarStyles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 12,
+    marginBottom: 12,
+    backgroundColor: '#eee',
+    borderRadius: 8,
+  },
+  portrait: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 12,
+  },
+  portraitPlaceholder: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#ccc',
+    marginRight: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  name: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    color: '#222',
+    flex: 1,
+  },
+  button: {
+    backgroundColor: '#30c035ff',
+    paddingVertical: 6,
+    paddingHorizontal: 16,
+    borderRadius: 6,
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  dropdown: {
+    position: 'absolute',
+    top: 40,
+    right: 0,
+    backgroundColor: '#fff',
+    borderRadius: 6,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 2 },
+    minWidth: 120,
+    zIndex: 10,
+  },
+  dropdownItem: {
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+  },
+  dropdownText: {
+    color: '#222',
+    fontSize: 16,
   },
 });

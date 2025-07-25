@@ -5,7 +5,14 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 const colorScheme = useColorScheme() ?? 'light';
 
 type User = {
-  name: string;
+  id: string;
+  firstName: string;
+  lastName: string;
+  username: string;
+  email: string;
+  phone: string;
+  dob: string;
+  portraitUri?: string;
   contribution: number;
 };
 
@@ -65,8 +72,8 @@ export function EventList({ events, selectedEvent, setSelectedEvent }: Props) {
               <Text style={{ fontWeight: 'bold', marginTop: 8, marginBottom: 4 }}>Contribution</Text>
               {/* Contributions */}
               {event.users.map(user => (
-                <View key={user.name} style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 4 }}>
-                  <Text>{user.name}</Text>
+                <View key={user.firstName} style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 4 }}>
+                  <Text>{user.firstName}</Text>
                   <Text>${user.contribution}</Text>
                 </View>
               ))}
@@ -86,8 +93,8 @@ export function EventList({ events, selectedEvent, setSelectedEvent }: Props) {
                     const amount = Math.min(share - debtor.contribution, creditor.contribution - share);
                     if (amount > 0) {
                       relationships.push({
-                        from: debtor.name,
-                        to: creditor.name,
+                        from: debtor.firstName,
+                        to: creditor.firstName,
                         amount: Math.round(amount * 100) / 100,
                       });
                     }

@@ -14,16 +14,8 @@ export function LeftMenuColumn({ leftOpen, setLeftOpen }: { leftOpen: boolean, s
     <View
       style={[
         sharedStyles.col1,
-        {
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          bottom: 0,
-          width: '100%',
-          height: '100%',
-          backgroundColor: colorScheme === 'dark' ? 'black' : 'white',
-          zIndex: 10,
-          flex: 1,
+        { 
+          backgroundColor: colorScheme === 'dark' ? 'black' : 'white', // overwrite background color
         },
       ]}
     >
@@ -90,6 +82,25 @@ export function LeftMenuColumn({ leftOpen, setLeftOpen }: { leftOpen: boolean, s
             ]}
           >
             Friends
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            sharedStyles.leftTabButton,
+            { backgroundColor: colorScheme === 'dark' ? '#222' : '#ccc' },
+          ]}
+          onPress={() => {
+            router.push('/settings');
+            setLeftOpen(false);
+          }}
+        >
+          <Text
+            style={[
+              sharedStyles.leftTabText,
+              { color: colorScheme === 'dark' ? 'white' : 'black' },
+            ]}
+          >
+            Settings
           </Text>
         </TouchableOpacity>
         {/* Add more buttons here as needed */}

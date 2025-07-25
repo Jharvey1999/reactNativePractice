@@ -4,17 +4,18 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { sharedStyles, friendsScreenStyles } from '@/components/styles/styles';import { LeftMenuColumn } from '@/components/LeftColumnMenu';
+import { sharedStyles, friendsScreenStyles } from '@/components/styles/styles';
+import { LeftMenuColumn } from '@/components/LeftColumnMenu';
 import { friendsList } from '@/storage/friendsList';
 import { calculateRelationship } from '@/util/calcRelationship';
-import {getSharedEvents} from '@/util/sharedEvents';
+import { getSharedEvents } from '@/util/sharedEvents';
 import { events } from '@/storage/events_database';
-import { users } from '@/storage/user_database';
 import { EventList } from '@/components/EventList';
 import { UniversalHeader } from '@/components/UniversalHeader';
 import { AddFriend } from '@/components/AddFriend';
-import { addFriend } from '@/util/addFriends'; 
+import { addFriend } from '@/util/addFriends';
 import { deleteFriend } from '@/util/deleteFriend';
+import { useProfile } from '@/components/ProfileContext'; 
 
 export default function FriendsScreen() {
   const [leftOpen, setLeftOpen] = useState(false);
@@ -26,11 +27,13 @@ export default function FriendsScreen() {
   const [addFriendVisible, setAddFriendVisible] = useState(false);
   const [deleteMode, setDeleteMode] = useState(false);
   const [friendsToDelete, setFriendsToDelete] = useState<string[]>([]);
+  const { user } = useProfile(); 
+
   const sharedEvents = selectedFriend
-    ? getSharedEvents(events, users[0].id, selectedFriend.id)
+    ? getSharedEvents(events, user.id, selectedFriend.id)
     : [];
 
-  const userId = users[0].id; // set current user ID
+  const userId = user.id; // set current user ID
   const friendId = selectedFriend?.id ?? '';
   const { youOwe, youAreOwed } = selectedFriend
     ? calculateRelationship(events, userId, friendId)

@@ -1,17 +1,26 @@
 import React, { createContext, useContext, useState } from 'react';
+import { User } from '@/storage/user_database';
 
 type ProfileContextType = {
   portraitUri?: string;
   setPortraitUri: (uri?: string) => void;
+  user: User;
+  setUser: (user: User) => void;
 };
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 
-export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [portraitUri, setPortraitUri] = useState<string | undefined>(undefined);
+type ProfileProviderProps = {
+  children: React.ReactNode;
+  initialUser: User; 
+};
+
+export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children, initialUser }) => {
+  const [portraitUri, setPortraitUri] = useState<string | undefined>(initialUser.portraitUri);
+  const [user, setUser] = useState<User>(initialUser);
 
   return (
-    <ProfileContext.Provider value={{ portraitUri, setPortraitUri }}>
+    <ProfileContext.Provider value={{ portraitUri, setPortraitUri, user, setUser }}>
       {children}
     </ProfileContext.Provider>
   );

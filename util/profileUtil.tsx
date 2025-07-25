@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { useProfile } from './ProfileContext';
+import { useProfile } from '../components/ProfileContext';
+import { profileBarStyles } from '@/components/styles/styles';
 
 type ProfileBarProps = {
-  name: string;
   onProfilePress?: () => void;
   onAddEvent?: () => void; 
   onRemoveEvent?: () => void; 
@@ -13,8 +13,8 @@ type ProfileBarProps = {
   selectedEvent?: string | null; 
   events: any[]; 
 };
+
 export const ProfileBar: React.FC<ProfileBarProps> = ({
-  name,
   onProfilePress,
   onAddEvent,
   onRemoveEvent,
@@ -23,15 +23,14 @@ export const ProfileBar: React.FC<ProfileBarProps> = ({
   selectedEvent,
   events,
 }) => {
-  
-  const { portraitUri, setPortraitUri } = useProfile();
+  const { user, portraitUri, setPortraitUri } = useProfile();
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [deleteEventVisible, setDeleteEventVisible] = useState(false);
   const [summaryVisible, setSummaryVisible] = useState(false);
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'], // universal and future-proof
+      mediaTypes: ['images'],
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
@@ -42,65 +41,67 @@ export const ProfileBar: React.FC<ProfileBarProps> = ({
   };
 
   return (
-    <View style={styles.container}>
+    <View style={profileBarStyles.container}>
       {/* User Portrait */}
       <TouchableOpacity onPress={pickImage}>
         {portraitUri ? (
-          <Image source={{ uri: portraitUri }} style={styles.portrait} />
+          <Image source={{ uri: portraitUri }} style={profileBarStyles.portrait} />
         ) : (
-          <View style={styles.portraitPlaceholder}>
+          <View style={profileBarStyles.portraitPlaceholder}>
             <Text style={{ fontSize: 24, color: '#555' }}>👤</Text>
           </View>
         )}
       </TouchableOpacity>
       {/* User Name */}
-      <Text style={styles.name}>{name}</Text>
+      <Text style={profileBarStyles.name}>
+        {user.firstName} {user.lastName}
+      </Text>
       {/* Profile Dropdown Button */}
       <View>
         <TouchableOpacity
-          style={styles.button}
+          style={profileBarStyles.button}
           onPress={() => setDropdownVisible((v) => !v)}
         >
-          <Text style={styles.buttonText}>Add ▼</Text>
+          <Text style={profileBarStyles.buttonText}>Add ▼</Text>
         </TouchableOpacity>
         {dropdownVisible && (
-          <View style={styles.dropdown}>
+          <View style={profileBarStyles.dropdown}>
             <TouchableOpacity
-              style={styles.dropdownItem}
+              style={profileBarStyles.dropdownItem}
               onPress={() => {
                 setDropdownVisible(false);
                 if (onAddEvent) onAddEvent();
               }}
             >
-              <Text style={styles.dropdownText}>Add</Text>
+              <Text style={profileBarStyles.dropdownText}>Add</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={styles.dropdownItem}
+              style={profileBarStyles.dropdownItem}
               onPress={() => {
                 setDropdownVisible(false);
                 if (onEditEvent) onEditEvent(); // undefined check before call
               }}
             >
-              <Text style={styles.dropdownText}>Edit</Text>
+              <Text style={profileBarStyles.dropdownText}>Edit</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={styles.dropdownItem}
+              style={profileBarStyles.dropdownItem}
               onPress={() => {
                 setDropdownVisible(false);
                 if (onRemoveEvent) onRemoveEvent();
                 else setDeleteEventVisible(true);
               }}
             >
-              <Text style={styles.dropdownText}>Delete</Text>
+              <Text style={profileBarStyles.dropdownText}>Delete</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={styles.dropdownItem}
+              style={profileBarStyles.dropdownItem}
               onPress={() => {
                 setDropdownVisible(false);
                 if (onSummary) onSummary();
               }}
             >
-              <Text style={styles.dropdownText}>Summary</Text>
+              <Text style={profileBarStyles.dropdownText}>Summary</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -108,67 +109,3 @@ export const ProfileBar: React.FC<ProfileBarProps> = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 12,
-    marginBottom: 12,
-    backgroundColor: '#eee',
-    borderRadius: 8,
-  },
-  portrait: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: 12,
-  },
-  portraitPlaceholder: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#ccc',
-    marginRight: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  name: {
-    fontWeight: 'bold',
-    fontSize: 18,
-    color: '#222',
-    flex: 1,
-  },
-  button: {
-    backgroundColor: '#30c035ff',
-    paddingVertical: 6,
-    paddingHorizontal: 16,
-    borderRadius: 6,
-  },
-  buttonText: {
-    color: 'white',
-    fontWeight: 'bold',
-  },
-  dropdown: {
-    position: 'absolute',
-    top: 40,
-    right: 0,
-    backgroundColor: '#fff',
-    borderRadius: 6,
-    elevation: 4,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: 2 },
-    minWidth: 120,
-    zIndex: 10,
-  },
-  dropdownItem: {
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-  },
-  dropdownText: {
-    color: '#222',
-    fontSize: 16,
-  },
-});

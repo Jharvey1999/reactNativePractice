@@ -25,12 +25,13 @@ function getEventUsers(userContributions: { id: string; contribution: number }[]
     })
     .filter(Boolean) as EventUser[];
 }
+
 // method to calc distribution of money
 export function calc(
   event: Event,
   currentUserId: string
 ): {
-  perUser: { id: string; name: string; contribution: number; balance: number }[];
+  perUser: { id: string; firstName: string; lastName: string; contribution: number; balance: number }[];
   totalCost: number;
   uOwed: number;
   othersOwed: number;
@@ -41,7 +42,8 @@ export function calc(
 
   const perUser = event.users.map(user => ({
     id: user.id,
-    name: user.name,
+    firstName: user.firstName,
+    lastName: user.lastName,
     contribution: user.contribution,
     balance: user.contribution - share,
   }));
