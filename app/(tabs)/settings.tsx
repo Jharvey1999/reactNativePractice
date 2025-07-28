@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, useColorScheme } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { UniversalHeader } from '@/components/UniversalHeader';
 import { sharedStyles } from '@/components/styles/styles';
 import { UserPortrait } from '@/components/UserPortrait';
 import { useProfile } from '@/components/ProfileContext';
-import { users } from '@/storage/user_database';
 import { useRouter } from 'expo-router';
+import { LeftMenuColumn } from '@/components/LeftColumnMenu'; // <-- Import
 
 export default function SettingsScreen() {
+  const [leftOpen, setLeftOpen] = useState(false); // <-- Add state
   const { user, portraitUri } = useProfile();
   const router = useRouter();
   const colorScheme = useColorScheme() ?? 'light';
@@ -25,10 +26,28 @@ export default function SettingsScreen() {
       headerImage={<UniversalHeader title="Settings" />}
     >
       <View style={sharedStyles.row}>
+        <LeftMenuColumn leftOpen={leftOpen} setLeftOpen={setLeftOpen} />
         <View style={[sharedStyles.col2, { flex: 2 }]}>
-          {/* Top User Info */}
+          {/* Hamburger Button */}
+          <TouchableOpacity
+            style={[sharedStyles.tab, { left: 0 }]}
+            onPress={() => setLeftOpen(!leftOpen)}
+            activeOpacity={0.8}
+          >
+            <Text
+              style={[
+                sharedStyles.expandHamburgerButton,
+                { color: colorScheme === 'dark' ? 'white' : 'black' },
+              ]}
+            >
+              {'\u2261'}
+            </Text>
+          </TouchableOpacity>
+
+          {/* Top widget with profile picture */}
           <View style={{ alignItems: 'center', marginBottom: 24 }}>
             <UserPortrait uri={portraitUri} size={72} />
+            {/* Current User Info */}
             <Text style={{ fontWeight: 'bold', fontSize: 18, marginTop: 8 }}>
               {user.firstName} {user.lastName}
             </Text>

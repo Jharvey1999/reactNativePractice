@@ -112,39 +112,21 @@ export default function HomeScreen() {
 									onRemoveEvent={handleRemoveEvent}
 								/>
 
-								{/* Left Expand Tab */}
-								{!leftOpen && (
-									<TouchableOpacity
-										style={[sharedStyles.tab, { left: 0 }]}
-										onPress={() => setLeftOpen(true)}
-										activeOpacity={0.8}
+								{/* Hamburger Button */}
+								<TouchableOpacity
+									style={[sharedStyles.tab, { left: 0 }]}
+									onPress={() => setLeftOpen(!leftOpen)} // Toggle logic so it works both ways
+									activeOpacity={0.8}
+								>
+									<Text
+									style={[
+										sharedStyles.expandHamburgerButton,
+										{ color: colorScheme === 'dark' ? 'white' : 'black' },
+									]}
 									>
-										<Text
-											style={[
-												sharedStyles.expandHamburgerButton,
-												{ color: colorScheme === 'dark' ? 'white' : 'black' },
-											]}
-										>
-											{'\u2261'}
-										</Text>
-									</TouchableOpacity>
-								)}
-								{leftOpen && (
-									<TouchableOpacity
-										style={[sharedStyles.tab, { left: 0, zIndex: 20 }]}
-										onPress={() => setLeftOpen(false)}
-										activeOpacity={0.8}
-									>
-										<Text
-											style={[
-												sharedStyles.expandHamburgerButton,
-												{ color: colorScheme === 'dark' ? 'white' : 'black' },
-											]}
-										>
-											{'\u2261'}
-										</Text>
-									</TouchableOpacity>
-								)}
+									{'\u2261'}
+									</Text>
+								</TouchableOpacity>
 							</View>
 						</View>
 					</ParallaxScrollView>

@@ -185,7 +185,12 @@ export const sharedStyles = StyleSheet.create({
   },
   profilePortraitContainer: {
     alignItems: 'center',
-    paddingTop: 24,
+    paddingTop: 48,
+    position: 'absolute', 
+    top: 0,               // Position at the top of the column
+    left: 0,
+    right: 0,
+    zIndex: 100,          // High zIndex to ensure it's above other content
   },
   profileFieldLabel: {
     fontWeight: 'bold',
@@ -208,13 +213,14 @@ export const sharedStyles = StyleSheet.create({
   profileSaveButton: {
     backgroundColor: '#30c035',
     paddingVertical: 10,
+    paddingHorizontal: 16,
     borderRadius: 6,
     alignItems: 'center',
   },
-  profileSaveButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 16,
+  
+  tapToEditLabel: {
+    fontSize: 10,
+    color: '#737773ff',
   },
 });
 
@@ -272,7 +278,6 @@ export const profileBarStyles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
     color: '#222',
-    flex: 1,
   },
   button: {
     backgroundColor: '#30c035ff',
@@ -304,6 +309,11 @@ export const profileBarStyles = StyleSheet.create({
   },
   dropdownText: {
     color: '#222',
+    fontSize: 16,
+  },
+  profileSaveButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
     fontSize: 16,
   },
 });
