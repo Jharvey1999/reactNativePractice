@@ -2,8 +2,6 @@ import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
-const colorScheme = useColorScheme() ?? 'light';
-
 type User = {
   id: string;
   firstName: string;
@@ -35,6 +33,7 @@ type Props = {
 };
 
 export function EventList({ events, selectedEvent, setSelectedEvent }: Props) {
+  const colorScheme = useColorScheme() ?? 'light';
   return (
     <View>
       {events.map(event => (

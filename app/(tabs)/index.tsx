@@ -19,7 +19,7 @@ import { EditEvent } from '@/components/EditEvent';
 import { EditEventForm } from '@/components/EditEvent';
 import { SummaryEvent } from '@/components/SummaryEvent';
 import { LeftMenuColumn } from '@/components/LeftColumnMenu';
-import { useProfile } from '@/components/ProfileContext'; // <-- Add this import
+import { useProfile } from '@/components/ProfileContext'; 
 
 export default function HomeScreen() {
 	const [leftOpen, setLeftOpen] = useState(false);

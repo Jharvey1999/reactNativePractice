@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Alert, Platform } from 'react-native';
 import { users } from '@/storage/user_database';
 
 type AddEventProps = {
@@ -23,7 +23,7 @@ export const AddEvent: React.FC<AddEventProps> = ({
   const [date, setDate] = useState(initialData?.date || '');
   const [contributions, setContributions] = useState(
     initialData?.contributions ||
-    [{ id: currentUserId, name: users.find(u => u.id === currentUserId)?.name || '', contribution: 0 }]
+    [{ id: currentUserId, name: users.find(u => u.id === currentUserId)?.username || '', contribution: 0 }]
   );
   const [availableFriends, setAvailableFriends] = useState(friends);
   const [dateError, setDateError] = useState('');
@@ -71,18 +71,15 @@ export const AddEvent: React.FC<AddEventProps> = ({
     <View
       style={{
         position: 'absolute',
-        top: 0,
+        top: 80,
         right: 0,
-        bottom: 0,
         width: 320,
         backgroundColor: '#fff',
         zIndex: 20,
         padding: 24,
         paddingBottom: 40,
-        shadowColor: '#000',
-        shadowOpacity: 0.2,
-        shadowRadius: 8,
-        elevation: 8,
+        boxShadow: Platform.OS === 'web' ? '0 4px 8px rgba(0,0,0,0.2)' : undefined,
+        elevation: Platform.OS === 'android' ? 8 : 0,
       }}
     >
       <Text style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 16 }}>Add Event</Text>
@@ -161,7 +158,7 @@ export const AddEvent: React.FC<AddEventProps> = ({
             setName('');
             setDate('');
             setDateError('');
-            setContributions(currentUser ? [{ id: currentUser.id, name: currentUser.name, contribution: 0 }] : []);
+            setContributions(currentUser ? [{ id: currentUser.id, name: currentUser.username, contribution: 0 }] : []);
             setAvailableFriends(friends);
             onClose();
           }}

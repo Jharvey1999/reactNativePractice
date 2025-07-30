@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Alert, Platform } from 'react-native';
 import { Event } from '@/storage/events_database';
 import { users } from '@/storage/user_database';
 
@@ -26,7 +26,7 @@ export const EditEventForm: React.FC<EditEventFormProps> = ({
   const [contributions, setContributions] = useState(
     event.users.map(u => ({
       id: u.id,
-      name: u.name,
+      name: u.username,
       contribution: u.contribution,
     }))
   );
@@ -190,13 +190,11 @@ export const EditEvent: React.FC<EditEventProps> = ({ visible, events, onClose, 
         right: 0,
         width: 320,
         backgroundColor: '#fff',
-        zIndex: 30,
+        zIndex: 20,
         padding: 24,
-        borderRadius: 8,
-        shadowColor: '#000',
-        shadowOpacity: 0.2,
-        shadowRadius: 8,
-        elevation: 8,
+        paddingBottom: 40,
+        boxShadow: Platform.OS === 'web' ? '0 4px 8px rgba(0,0,0,0.2)' : undefined,
+        elevation: Platform.OS === 'android' ? 8 : 0,
       }}
     >
       <Text style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 16 }}>Select Event to Edit</Text>

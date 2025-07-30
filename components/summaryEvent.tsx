@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Platform } from 'react-native';
 import { Event } from '@/storage/events_database';
 
 type SummaryEventProps = {
@@ -40,10 +40,8 @@ export const SummaryEvent: React.FC<SummaryEventProps> = ({
         zIndex: 50,
         padding: 24,
         borderRadius: 8,
-        shadowColor: '#000',
-        shadowOpacity: 0.2,
-        shadowRadius: 8,
-        elevation: 8,
+        boxShadow: Platform.OS === 'web' ? '0 4px 8px rgba(0,0,0,0.2)' : undefined,
+        elevation: Platform.OS === 'android' ? 8 : 0,
       }}
     >
       <Text style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 16 }}>Summary</Text>
