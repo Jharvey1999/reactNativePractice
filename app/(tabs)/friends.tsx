@@ -16,6 +16,7 @@ import { AddFriend } from '@/components/AddFriend';
 import { addFriend } from '@/util/addFriends';
 import { deleteFriend } from '@/util/deleteFriend';
 import { useProfile } from '@/components/ProfileContext'; 
+import { useTranslation } from '@/components/hooks/useTranslation';
 
 export default function FriendsScreen() {
   const [leftOpen, setLeftOpen] = useState(false);
@@ -28,6 +29,7 @@ export default function FriendsScreen() {
   const [deleteMode, setDeleteMode] = useState(false);
   const [friendsToDelete, setFriendsToDelete] = useState<string[]>([]);
   const { user } = useProfile(); 
+  const { t } = useTranslation();
 
   const sharedEvents = selectedFriend
     ? getSharedEvents(events, user.id, selectedFriend.id)
@@ -100,14 +102,14 @@ export default function FriendsScreen() {
           {/* Main Content */}
           {/* Friends Header */}
           <ThemedView style={[sharedStyles.titleContainer, { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }]}>
-            <ThemedText type="title">Friends</ThemedText>
+            <ThemedText type="title">{t.friends}</ThemedText>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               {/* Add Friend Button */}
               <TouchableOpacity
                 style={friendsScreenStyles.addFriendButton}
                 onPress={() => setAddFriendVisible(true)}
               >
-                <Text style={friendsScreenStyles.addFriendButtonText}>Add Friend</Text>
+                <Text style={friendsScreenStyles.addFriendButtonText}>{t.addFriend}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[friendsScreenStyles.addFriendButton, { backgroundColor: 'red', marginLeft: 8 }]}
@@ -119,7 +121,7 @@ export default function FriendsScreen() {
                   setDeleteMode(!deleteMode);
                 }}
               >
-                <Text style={[friendsScreenStyles.addFriendButtonText, { color: 'white' }]}>Remove Friend</Text>
+                <Text style={[friendsScreenStyles.addFriendButtonText, { color: 'white' }]}>{t.removeFriend}</Text>
               </TouchableOpacity>
             </View>
           </ThemedView>
@@ -204,16 +206,16 @@ export default function FriendsScreen() {
             </Text>
             {/* Relationship details */}
             <Text>
-              Shared Events: {sharedEvents.length}{' '}
+              {t.sharedEvents}: {sharedEvents.length}{' '}
               <Text
                 style={{ color: 'blue', textDecorationLine: 'underline' }}
                 onPress={() => setShowSharedEvents(true)}
               >
-                Show
+                {t.show}
               </Text>
             </Text>
-            <Text style={{ color: 'red' }}>You owe {selectedFriend?.name}: ${youOwe.toFixed(2)}</Text>
-            <Text style={{ color: 'green' }}>{selectedFriend?.name} owes you: ${youAreOwed.toFixed(2)}</Text>
+            <Text style={{ color: 'red' }}>{t.youOwe} {selectedFriend?.name}: ${youOwe.toFixed(2)}</Text>
+            <Text style={{ color: 'green' }}>{selectedFriend?.name} {t.owesYou}: ${youAreOwed.toFixed(2)}</Text>
           </View>
         )}
       </View>
@@ -226,7 +228,7 @@ export default function FriendsScreen() {
             <Text style={{ fontSize: 24 }}>{'\u25B6'}</Text>
           </TouchableOpacity>
           <Text style={friendsScreenStyles.friendName}>
-            Shared Events with {selectedFriend?.name}
+            {t.sharedEvents} {t.with} {selectedFriend?.name}
           </Text>
           <ScrollView>
             <EventList

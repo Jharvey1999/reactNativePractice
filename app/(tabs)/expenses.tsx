@@ -8,17 +8,19 @@ import { useRouter } from 'expo-router';
 import { sharedStyles } from '@/components/styles/styles';
 import { LeftMenuColumn } from '@/components/LeftColumnMenu';
 import { UniversalHeader } from '@/components/UniversalHeader';
+import { useTranslation } from '@/components/hooks/useTranslation';
 
 export default function ExpensesScreen() {
   const [leftOpen, setLeftOpen] = useState(false);
   const [rightOpen, setRightOpen] = useState(false);
   const colorScheme = useColorScheme() ?? 'light';
   const router = useRouter();
+  const { t } = useTranslation();
 
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#30c035ff', dark: '#17851bff' }}
-      headerImage={<UniversalHeader title="Expenses" />}
+      headerImage={<UniversalHeader title={t.expenses} />}
     >
       <View style={sharedStyles.row}>
         {/* Left Column Menu (shared) */}
@@ -34,9 +36,6 @@ export default function ExpensesScreen() {
           ]}
         >
           {/* Main content */}
-          <ThemedView style={sharedStyles.titleContainer}>
-            <ThemedText type="title">Expenses Page</ThemedText>
-          </ThemedView>
           <ThemedView style={sharedStyles.stepContainer}>
             <ThemedText type="subtitle">Your Expenses</ThemedText>
             <ThemedText>

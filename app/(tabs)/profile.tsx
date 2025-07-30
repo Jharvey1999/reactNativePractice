@@ -10,12 +10,14 @@ import { LeftMenuColumn } from '@/components/LeftColumnMenu';
 import { pickProfileImage } from '@/components/ImagePicker'; 
 import { profileBarStyles } from '@/components/styles/styles';
 import { useRouter } from 'expo-router';
+import { useLanguage } from '@/components/LanguageContext';
 
 export default function ProfileScreen() {
   const { user, setUser, portraitUri, setPortraitUri } = useProfile();
   const colorScheme = useColorScheme() ?? 'light';
   const labelColor = colorScheme === 'dark' ? 'white' : 'black';
   const inputTextColor = colorScheme === 'dark' ? 'white' : 'black';
+  const { t } = useLanguage();
 
   // State for each field, pre-populated
   const [firstName, setFirstName] = useState(user.firstName);
@@ -69,83 +71,83 @@ export default function ProfileScreen() {
               <UserPortrait uri={portraitUri} size={72} />
             </TouchableOpacity>
             <Text style={[sharedStyles.tapToEditLabel]}>
-              Tap to change picture
+              {t.tapToEdit}
             </Text>
           </View>
 
           {/* User Info */}
           <ScrollView contentContainerStyle={{ padding: 0 }}>
             {/* First Name */}
-            <Text style={[sharedStyles.profileFieldLabel, { color: labelColor }]}>First Name</Text>
+            <Text style={[sharedStyles.profileFieldLabel, { color: labelColor }]}>{t.firstName}</Text>
             <TextInput
               style={[sharedStyles.profileTextInput, { color: inputTextColor }]}
               value={firstName}
               onChangeText={setFirstName}
-              placeholder="Enter first name"
-              placeholderTextColor={colorScheme === 'dark' ? '#aaa' : '#888'} // optional: theme placeholder too
+              placeholder={t.enterFirstName}
+              placeholderTextColor={colorScheme === 'dark' ? '#aaa' : '#888'} 
             />
 
             {/* Last Name */}
-            <Text style={[sharedStyles.profileFieldLabel, { color: labelColor }]}>Last Name</Text>
+            <Text style={[sharedStyles.profileFieldLabel, { color: labelColor }]}>{t.lastName}</Text>
             <TextInput
               style={[sharedStyles.profileTextInput, { color: inputTextColor }]}
               value={lastName}
               onChangeText={setLastName}
-              placeholder="Enter last name"
-              placeholderTextColor={colorScheme === 'dark' ? '#aaa' : '#888'} // optional: theme placeholder too
+              placeholder={t.enterLastName}
+              placeholderTextColor={colorScheme === 'dark' ? '#aaa' : '#888'} 
             />
 
             {/* Username */}
-            <Text style={[sharedStyles.profileFieldLabel, { color: labelColor }]}>Username</Text>
+            <Text style={[sharedStyles.profileFieldLabel, { color: labelColor }]}>{t.username}</Text>
             <TextInput
               style={[sharedStyles.profileTextInput, { color: inputTextColor }]}
               value={username}
               onChangeText={setUsername}
-              placeholder="Enter username"
-              placeholderTextColor={colorScheme === 'dark' ? '#aaa' : '#888'} // optional: theme placeholder too
+              placeholder={t.enterUsername}
+              placeholderTextColor={colorScheme === 'dark' ? '#aaa' : '#888'} 
             />
 
             {/* Email */}
-            <Text style={[sharedStyles.profileFieldLabel, { color: labelColor }]}>Email</Text>
+            <Text style={[sharedStyles.profileFieldLabel, { color: labelColor }]}>{t.email}</Text>
             <TextInput
               style={[sharedStyles.profileTextInput, { color: inputTextColor }]}
               value={email}
               onChangeText={setEmail}
-              placeholder="Enter email"
+              placeholder={t.enterEmail}
               keyboardType="email-address"
-              placeholderTextColor={colorScheme === 'dark' ? '#aaa' : '#888'} // optional: theme placeholder too
+              placeholderTextColor={colorScheme === 'dark' ? '#aaa' : '#888'} 
             />
 
             {/* Phone */}
-            <Text style={[sharedStyles.profileFieldLabel, { color: labelColor }]}>Phone</Text>
+            <Text style={[sharedStyles.profileFieldLabel, { color: labelColor }]}>{t.phone}</Text>
             <TextInput
               style={[sharedStyles.profileTextInput, { color: inputTextColor }]}
               value={phone}
               onChangeText={setPhone}
-              placeholder="Enter phone"
+              placeholder={t.enterPhone}
               keyboardType="phone-pad"
-              placeholderTextColor={colorScheme === 'dark' ? '#aaa' : '#888'} // optional: theme placeholder too
+              placeholderTextColor={colorScheme === 'dark' ? '#aaa' : '#888'} 
             />
 
             {/* Date of Birth */}
-            <Text style={[sharedStyles.profileFieldLabel, { color: labelColor }]}>Date of Birth (yyyy-mm-dd)</Text>
+            <Text style={[sharedStyles.profileFieldLabel, { color: labelColor }]}>{t.dateOfBirth} (yyyy-mm-dd)</Text>
             <TextInput
               style={[sharedStyles.profileTextInput, { color: inputTextColor }]}
               value={dob}
               onChangeText={setDob}
               placeholder="YYYY-MM-DD"
-              placeholderTextColor={colorScheme === 'dark' ? '#aaa' : '#888'} // optional: theme placeholder too
+              placeholderTextColor={colorScheme === 'dark' ? '#aaa' : '#888'} 
             />
 
             {/* Password */}
-            <Text style={[sharedStyles.profileFieldLabel, { color: labelColor }]}>Password</Text>
+            <Text style={[sharedStyles.profileFieldLabel, { color: labelColor }]}>{t.password}</Text>
             <TextInput
               style={[sharedStyles.profileTextInputPassword, { color: inputTextColor }]}
               value={'*'.repeat(password.length)}
               onChangeText={text => setPassword(text)}
-              placeholder="Enter password"
+              placeholder={t.enterPassword}
               secureTextEntry
-              placeholderTextColor={colorScheme === 'dark' ? '#aaa' : '#888'} // optional: theme placeholder too
+              placeholderTextColor={colorScheme === 'dark' ? '#aaa' : '#888'} 
             />
 
             {/* Save Button and Success Icon */}
@@ -167,7 +169,7 @@ export default function ProfileScreen() {
                   setTimeout(() => setShowSuccess(false), 2000); // Hide after 2 seconds
                 }}
               >
-                <Text style={profileBarStyles.profileSaveButtonText}>  Save  </Text>
+                <Text style={profileBarStyles.profileSaveButtonText}>  {t.save}  </Text>
               </TouchableOpacity>
               {/* Saved Successfully Icon */}
               {showSuccess && (
@@ -183,7 +185,7 @@ export default function ProfileScreen() {
               ]}
               onPress={() => router.push('/settings')}
             >
-              <Text style={profileBarStyles.profileSaveButtonText}>Cancel</Text>
+              <Text style={profileBarStyles.profileSaveButtonText}>{t.cancel}</Text>
             </TouchableOpacity>
             </View>
           </ScrollView>

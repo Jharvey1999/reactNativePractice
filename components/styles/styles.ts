@@ -183,10 +183,10 @@ export const sharedStyles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 48,
     position: 'absolute', 
-    top: 0,               // Position at the top of the column
+    top: 0,               
     left: 0,
     right: 0,
-    zIndex: 100,          // High zIndex to ensure it's above other content
+    zIndex: 100,          // zIndex = layer priority
   },
   profileFieldLabel: {
     fontWeight: 'bold',
@@ -234,15 +234,15 @@ export const friendsScreenStyles = StyleSheet.create({
   },
   addFriendButton: {
     backgroundColor: '#30c035',
-    paddingVertical: 4,     // <-- reduce this value for less height
-    paddingHorizontal: 8,  // <-- reduce this value for less width
+    paddingVertical: 4,     // height
+    paddingHorizontal: 8,   // width
     borderRadius: 6, 
     marginLeft: 12, 
   },
   addFriendButtonText: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize: 10,         // <-- adjust font size as needed
+    fontSize: 10,         
   },
 });
 
