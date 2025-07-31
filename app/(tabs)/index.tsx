@@ -35,7 +35,7 @@ export default function HomeScreen() {
 	const [summaryVisible, setSummaryVisible] = useState(false);
 
 	const router = useRouter();
-	const { user } = useProfile(); // <-- Get current user from context
+	const { user } = useProfile(); // use current user
 
 	// Zoom logic
 	const scale = useSharedValue(1);
@@ -68,6 +68,7 @@ export default function HomeScreen() {
 									justifyContent: 'flex-start',
 								}}
 							>
+								{/* MAIN title (no translation) */}
 								<Text
 									style={{
 										fontSize: Platform.OS === 'web' ? 58 : 30,
@@ -115,7 +116,7 @@ export default function HomeScreen() {
 								{/* Hamburger Button */}
 								<TouchableOpacity
 									style={[sharedStyles.tab, { left: 0 }]}
-									onPress={() => setLeftOpen(!leftOpen)} // Toggle logic so it works both ways
+									onPress={() => setLeftOpen(!leftOpen)} // toggle logic so it works for expand and collapse
 									activeOpacity={0.8}
 								>
 									<Text
@@ -140,12 +141,12 @@ export default function HomeScreen() {
 								eventData.date,
 								eventData.name,
 								eventData.contributions,
-								user.id // <-- Use context user id
+								user.id
 							);
 							setEventList(prev => [...prev, newEvent]);
 							setAddEventVisible(false);
 						}}
-						currentUserId={user.id} // <-- Use context user id
+						currentUserId={user.id}
 						friends={friendsList}
 					/>
 					<DeleteEvent
@@ -187,7 +188,7 @@ export default function HomeScreen() {
 					<SummaryEvent
 						visible={summaryVisible}
 						events={eventList}
-						currentUserId={user.id} // <-- Use context user id
+						currentUserId={user.id}
 						onClose={() => setSummaryVisible(false)}
 					/>
 				</Animated.View>

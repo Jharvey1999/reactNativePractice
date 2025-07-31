@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { useTranslation } from '@/components/hooks/useTranslation';
 
 type User = {
   id: string;
@@ -34,6 +35,7 @@ type Props = {
 
 export function EventList({ events, selectedEvent, setSelectedEvent }: Props) {
   const colorScheme = useColorScheme() ?? 'light';
+  const { t } = useTranslation();
   return (
     <View>
       {events.map(event => (
@@ -49,26 +51,26 @@ export function EventList({ events, selectedEvent, setSelectedEvent }: Props) {
             onPress={() => setSelectedEvent(selectedEvent === event.id ? null : event.id)}
           >
             <Text style={{ fontWeight: 'bold', fontSize: 18 }}>{event.name}</Text>
-            <Text>Date: {event.date}</Text>
-            <Text>Total Cost: ${event.totalCost}</Text>
-            <Text>You paid: <Text style={{ fontWeight: 'bold' }}>${event.paid}</Text></Text>
-            <Text>You Owe: <Text style={{color: event.uOwed !==0 ? 'red' : 'black'}}>${event.uOwed}</Text></Text>
-            <Text>Others owe you: <Text style={{color: event.othersOwed !== 0 ? 'green' : 'black'}}>${event.othersOwed}</Text></Text>
+            <Text>{t.date}: {event.date}</Text>
+            <Text>{t.totalCost}: ${event.totalCost}</Text>
+            <Text>{t.youPaid}: <Text style={{ fontWeight: 'bold' }}>${event.paid}</Text></Text>
+            <Text>{t.youOwe}: <Text style={{color: event.uOwed !==0 ? 'red' : 'black'}}>${event.uOwed}</Text></Text>
+            <Text>{t.othersOweYou}: <Text style={{color: event.othersOwed !== 0 ? 'green' : 'black'}}>${event.othersOwed}</Text></Text>
           </TouchableOpacity>
           {selectedEvent === event.id && (
             <View style={{ backgroundColor: '#fff', borderRadius: 8, padding: 16, marginTop: 8 }}>
-              <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Event Details</Text>
+              <Text style={{ fontWeight: 'bold', fontSize: 16 }}>{t.eventDetails}</Text>
               {/* Header Section */}
               <View style={{ marginTop: 8, marginBottom: 8 }}>
-                <Text style={{ fontWeight: 'bold' }}>Total Cost: ${event.totalCost}</Text>
-                <Text>Status</Text>
-                <Text>Date: {event.date}</Text>
-                <Text>Users Involved: {event.users.length}</Text>
+                <Text style={{ fontWeight: 'bold' }}>{t.totalCost}: ${event.totalCost}</Text>
+                <Text>{t.status}</Text>
+                <Text>{t.date}: {event.date}</Text>
+                <Text>{t.usersInvolved}: {event.users.length}</Text>
               </View>
               {/* Line Separator */}
               <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginVertical: 8 }} />
               {/* Paid Header */}
-              <Text style={{ fontWeight: 'bold', marginTop: 8, marginBottom: 4 }}>Contribution</Text>
+              <Text style={{ fontWeight: 'bold', marginTop: 8, marginBottom: 4 }}>{t.contribution}</Text>
               {/* Contributions */}
               {event.users.map(user => (
                 <View key={user.firstName} style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 4 }}>
@@ -79,7 +81,7 @@ export function EventList({ events, selectedEvent, setSelectedEvent }: Props) {
               {/* Divider */}
               <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginVertical: 8 }} />
               {/* Relationships */}
-              <Text style={{ fontWeight: 'bold', marginBottom: 4 }}>Relationships</Text>
+              <Text style={{ fontWeight: 'bold', marginBottom: 4 }}>{t.relationships}</Text>
               {(() => {
                 const currentUser = "Anon"; // Replace with getCurrentUser later
                 const relationships: { from: string; to: string; amount: number }[] = [];
@@ -103,7 +105,7 @@ export function EventList({ events, selectedEvent, setSelectedEvent }: Props) {
                 if (relationships.length === 0) {
                   return (
                     <Text style={{ marginVertical: 2, color: '#888' }}>
-                      No relationships: nobody owes anyone.
+                      {t.noRelationships}
                     </Text>
                   );
                 }
@@ -125,7 +127,7 @@ export function EventList({ events, selectedEvent, setSelectedEvent }: Props) {
                 style={{ marginTop: 12, alignSelf: 'flex-end' }}
                 onPress={() => setSelectedEvent(null)}
               >
-                <Text style={{ color: '#000000ff', fontWeight: 'bold' }}>Close</Text>
+                <Text style={{ color: '#000000ff', fontWeight: 'bold' }}>{t.close}</Text>
               </TouchableOpacity>
             </View>
           )}

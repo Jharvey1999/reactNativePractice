@@ -4,6 +4,8 @@ import * as ImagePicker from 'expo-image-picker';
 import { useProfile } from '../components/ProfileContext';
 import { profileBarStyles } from '@/components/styles/styles';
 import { useRouter } from 'expo-router';
+import { useTranslation } from '@/components/hooks/useTranslation';
+
 
 type ProfileBarProps = {
   onProfilePress?: () => void;
@@ -29,6 +31,7 @@ export const ProfileBar: React.FC<ProfileBarProps> = ({
   const [deleteEventVisible, setDeleteEventVisible] = useState(false);
   const [summaryVisible, setSummaryVisible] = useState(false);
   const router = useRouter();
+  const { t } = useTranslation();
 
   // Handler for navigating to profile
   const handleNavigateProfile = () => {
@@ -59,7 +62,7 @@ export const ProfileBar: React.FC<ProfileBarProps> = ({
         style={profileBarStyles.button}
         onPress={() => setDropdownVisible((v) => !v)}
       >
-        <Text style={profileBarStyles.buttonText}>Add ▼</Text>
+        <Text style={profileBarStyles.buttonText}>{t.add} ▼</Text>
       </TouchableOpacity>
       {dropdownVisible && (
         <View style={profileBarStyles.dropdown}>
@@ -70,7 +73,7 @@ export const ProfileBar: React.FC<ProfileBarProps> = ({
               if (onAddEvent) onAddEvent();
             }}
           >
-            <Text style={profileBarStyles.dropdownText}>Add</Text>
+            <Text style={profileBarStyles.dropdownText}>{t.add}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={profileBarStyles.dropdownItem}
@@ -79,7 +82,7 @@ export const ProfileBar: React.FC<ProfileBarProps> = ({
               if (onEditEvent) onEditEvent(); // undefined check before call
             }}
           >
-            <Text style={profileBarStyles.dropdownText}>Edit</Text>
+            <Text style={profileBarStyles.dropdownText}>{t.edit}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={profileBarStyles.dropdownItem}
@@ -89,7 +92,7 @@ export const ProfileBar: React.FC<ProfileBarProps> = ({
               else setDeleteEventVisible(true);
             }}
           >
-            <Text style={profileBarStyles.dropdownText}>Delete</Text>
+            <Text style={profileBarStyles.dropdownText}>{t.delete}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={profileBarStyles.dropdownItem}
@@ -98,7 +101,7 @@ export const ProfileBar: React.FC<ProfileBarProps> = ({
               if (onSummary) onSummary();
             }}
           >
-            <Text style={profileBarStyles.dropdownText}>Summary</Text>
+            <Text style={profileBarStyles.dropdownText}>{t.summary}</Text>
           </TouchableOpacity>
         </View>
       )}

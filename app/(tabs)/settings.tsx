@@ -190,9 +190,8 @@ export default function SettingsScreen() {
                       },
                     ]}
                   >
-                    {lang.code === 'en' && t.english}
-                    {lang.code === 'es' && t.spanish}
-                    {lang.code === 'fr' && t.french}
+                    {/* Display the translated language name using the translation key */}
+                    {t[lang.displayKey]}
                   </Text>
                 </TouchableOpacity>
               ))}

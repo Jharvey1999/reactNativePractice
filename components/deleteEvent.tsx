@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { sharedStyles } from '@/components/styles/styles';
+import { useTranslation } from '@/components/hooks/useTranslation';
 
 type Event = {
   id: string;
@@ -16,11 +17,12 @@ type DeleteEventProps = {
 };
 
 export const DeleteEvent: React.FC<DeleteEventProps> = ({ visible, events, onClose, onRemove }) => {
+  const { t } = useTranslation();
   if (!visible) return null;
 
   return (
     <View style={sharedStyles.rightColumn}>
-      <Text style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 16 }}>Remove Event</Text>
+      <Text style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 16 }}>{t.removeEvent}</Text>
       <ScrollView>
         {events.map(event => (
           <TouchableOpacity
@@ -39,7 +41,7 @@ export const DeleteEvent: React.FC<DeleteEventProps> = ({ visible, events, onClo
         style={{ marginTop: 16, alignSelf: 'flex-end' }}
         onPress={onClose}
       >
-        <Text style={{ color: 'red', fontWeight: 'bold' }}>Cancel</Text>
+        <Text style={{ color: 'red', fontWeight: 'bold' }}>{t.cancel}</Text>
       </TouchableOpacity>
     </View>
   );

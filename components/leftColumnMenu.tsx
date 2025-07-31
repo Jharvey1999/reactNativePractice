@@ -3,10 +3,13 @@ import { View, ScrollView, TouchableOpacity, Text } from 'react-native';
 import { useRouter } from 'expo-router';
 import { sharedStyles } from '@/components/styles/styles';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { useTranslation } from '@/components/hooks/useTranslation';
+
 
 export function LeftMenuColumn({ leftOpen, setLeftOpen }: { leftOpen: boolean, setLeftOpen: (open: boolean) => void }) {
   const colorScheme = useColorScheme() ?? 'light';
   const router = useRouter();
+  const { t } = useTranslation();
 
   if (!leftOpen) return null;
 
@@ -43,7 +46,7 @@ export function LeftMenuColumn({ leftOpen, setLeftOpen }: { leftOpen: boolean, s
               { color: colorScheme === 'dark' ? 'white' : 'black' },
             ]}
           >
-            Home
+            {t.home}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -62,7 +65,7 @@ export function LeftMenuColumn({ leftOpen, setLeftOpen }: { leftOpen: boolean, s
               { color: colorScheme === 'dark' ? 'white' : 'black' },
             ]}
           >
-            Expenses
+            {t.expenses}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -81,7 +84,7 @@ export function LeftMenuColumn({ leftOpen, setLeftOpen }: { leftOpen: boolean, s
               { color: colorScheme === 'dark' ? 'white' : 'black' },
             ]}
           >
-            Friends
+            {t.friends}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -100,7 +103,7 @@ export function LeftMenuColumn({ leftOpen, setLeftOpen }: { leftOpen: boolean, s
               { color: colorScheme === 'dark' ? 'white' : 'black' },
             ]}
           >
-            Settings
+            {t.settings}
           </Text>
         </TouchableOpacity>
         {/* Add more buttons here as needed */}

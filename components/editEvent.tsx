@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, Alert, Platform } from 'react-native';
 import { Event } from '@/storage/events_database';
 import { users } from '@/storage/user_database';
+import { useTranslation } from '@/components/hooks/useTranslation';
 
 type EditEventFormProps = {
   visible: boolean;
@@ -31,6 +32,7 @@ export const EditEventForm: React.FC<EditEventFormProps> = ({
     }))
   );
   const [dateError, setDateError] = useState('');
+  const { t } = useTranslation();
 
   // Friends not already in contributions
   const availableFriends = useMemo(
@@ -89,16 +91,16 @@ export const EditEventForm: React.FC<EditEventFormProps> = ({
         elevation: 8,
       }}
     >
-      <Text style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 16 }}>Edit Event</Text>
+      <Text style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 16 }}>{t.editEvent}</Text>
       <ScrollView>
-        <Text style={{ marginBottom: 4 }}>Event Name</Text>
+        <Text style={{ marginBottom: 4 }}>{t.eventName}</Text>
         <TextInput
           style={{ borderWidth: 1, borderColor: '#ccc', marginBottom: 12, padding: 8 }}
           value={name}
           onChangeText={setName}
-          placeholder="Enter event name"
+          placeholder={t.enterEventName}
         />
-        <Text style={{ marginBottom: 4 }}>Date</Text>
+        <Text style={{ marginBottom: 4 }}>{t.date}</Text>
         <TextInput
           style={{ borderWidth: 1, borderColor: dateError ? 'red' : '#ccc', marginBottom: 12, padding: 8 }}
           value={date}
@@ -112,7 +114,7 @@ export const EditEventForm: React.FC<EditEventFormProps> = ({
         {dateError ? (
           <Text style={{ color: 'red', marginBottom: 8 }}>{dateError}</Text>
         ) : null}
-        <Text style={{ marginBottom: 4 }}>Contributions</Text>
+        <Text style={{ marginBottom: 4 }}>{t.contributions}</Text>
         {contributions.map((c, idx) => (
           <View key={c.id} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
             <Text style={{ flex: 1 }}>{c.name}</Text>
@@ -130,7 +132,7 @@ export const EditEventForm: React.FC<EditEventFormProps> = ({
           </View>
         ))}
         {/* Add Friends Section */}
-        <Text style={{ marginTop: 12, marginBottom: 4, fontWeight: 'bold' }}>Add Friends</Text>
+        <Text style={{ marginTop: 12, marginBottom: 4, fontWeight: 'bold' }}>{t.addFriends}</Text>
         {availableFriends.map(friend => (
           <TouchableOpacity
             key={friend.id}
@@ -148,7 +150,7 @@ export const EditEventForm: React.FC<EditEventFormProps> = ({
       </ScrollView>
       <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 24, paddingBottom: 16 }}>
         <TouchableOpacity onPress={onClose} style={{ marginRight: 12 }}>
-          <Text style={{ color: 'red', fontWeight: 'bold' }}>Cancel</Text>
+          <Text style={{ color: 'red', fontWeight: 'bold' }}>{t.cancel}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
@@ -165,7 +167,7 @@ export const EditEventForm: React.FC<EditEventFormProps> = ({
             onClose();
           }}
         >
-          <Text style={{ color: '#17851bff', fontWeight: 'bold' }}>Save</Text>
+          <Text style={{ color: '#17851bff', fontWeight: 'bold' }}>{t.save}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -180,6 +182,7 @@ type EditEventProps = {
 };
 
 export const EditEvent: React.FC<EditEventProps> = ({ visible, events, onClose, onSelect }) => {
+  const { t } = useTranslation();
   if (!visible) return null;
 
   return (
@@ -197,7 +200,7 @@ export const EditEvent: React.FC<EditEventProps> = ({ visible, events, onClose, 
         elevation: Platform.OS === 'android' ? 8 : 0,
       }}
     >
-      <Text style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 16 }}>Select Event to Edit</Text>
+      <Text style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 16 }}>{t.selectEventToEdit}</Text>
       <ScrollView>
         {events.map(event => (
           <TouchableOpacity
@@ -216,7 +219,7 @@ export const EditEvent: React.FC<EditEventProps> = ({ visible, events, onClose, 
         style={{ marginTop: 16, alignSelf: 'flex-end' }}
         onPress={onClose}
       >
-        <Text style={{ color: 'red', fontWeight: 'bold' }}>Cancel</Text>
+        <Text style={{ color: 'red', fontWeight: 'bold' }}>{t.cancel}</Text>
       </TouchableOpacity>
     </View>
   );

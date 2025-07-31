@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { sharedStyles } from '@/components/styles/styles';
+import { useTranslation } from '@/components/hooks/useTranslation';
 
 type Friend = {
   id: string;
@@ -15,11 +16,12 @@ type DeleteFriendProps = {
 };
 
 export const DeleteFriend: React.FC<DeleteFriendProps> = ({ visible, friends, onClose, onRemove }) => {
+  const { t } = useTranslation();
   if (!visible) return null;
 
   return (
     <View style={sharedStyles.rightColumn}>
-      <Text style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 16 }}>Remove Friend</Text>
+      <Text style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 16 }}>{t.removeFriend}</Text>
       <ScrollView>
         {friends.map(friend => (
           <TouchableOpacity
@@ -38,7 +40,7 @@ export const DeleteFriend: React.FC<DeleteFriendProps> = ({ visible, friends, on
         style={{ marginTop: 16, alignSelf: 'flex-end' }}
         onPress={onClose}
       >
-        <Text style={{ color: 'red', fontWeight: 'bold' }}>Cancel</Text>
+        <Text style={{ color: 'red', fontWeight: 'bold' }}>{t.cancel}</Text>
       </TouchableOpacity>
     </View>
   );

@@ -37,10 +37,10 @@ export default function ExpensesScreen() {
         >
           {/* Main content */}
           <ThemedView style={sharedStyles.stepContainer}>
-            <ThemedText type="subtitle">Your Expenses</ThemedText>
+            <ThemedText type="subtitle">{t.yourExpenses}</ThemedText>
             <ThemedText>
               {/* Expenses List */}
-              This is where your expenses will be listed.
+              {t.expensesList}
             </ThemedText>
           </ThemedView>
         </View>

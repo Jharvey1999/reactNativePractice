@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Alert, Platform } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Platform } from 'react-native';
 import { users } from '@/storage/user_database';
+import { useTranslation } from '@/components/hooks/useTranslation';
 
 type AddEventProps = {
   visible: boolean;
@@ -27,6 +28,7 @@ export const AddEvent: React.FC<AddEventProps> = ({
   );
   const [availableFriends, setAvailableFriends] = useState(friends);
   const [dateError, setDateError] = useState('');
+  const { t } = useTranslation();
 
   if (!visible) return null;
 
@@ -82,16 +84,16 @@ export const AddEvent: React.FC<AddEventProps> = ({
         elevation: Platform.OS === 'android' ? 8 : 0,
       }}
     >
-      <Text style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 16 }}>Add Event</Text>
+      <Text style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 16 }}>{t.addEvent}</Text>
       <ScrollView>
-        <Text style={{ marginBottom: 4 }}>Event Name</Text>
+        <Text style={{ marginBottom: 4 }}>{t.eventName}</Text>
         <TextInput
           style={{ borderWidth: 1, borderColor: '#ccc', marginBottom: 12, padding: 8 }}
           value={name}
           onChangeText={setName}
-          placeholder="Enter event name"
+          placeholder={t.enterEventName}
         />
-        <Text style={{ marginBottom: 4 }}>Date</Text>
+        <Text style={{ marginBottom: 4 }}>{t.date}</Text>
         <TextInput
           style={{ borderWidth: 1, borderColor: dateError ? 'red' : '#ccc', marginBottom: 12, padding: 8 }}
           value={date}
@@ -105,7 +107,7 @@ export const AddEvent: React.FC<AddEventProps> = ({
         {dateError ? (
           <Text style={{ color: 'red', marginBottom: 8 }}>{dateError}</Text>
         ) : null}
-        <Text style={{ marginBottom: 4 }}>Contributions</Text>
+        <Text style={{ marginBottom: 4 }}>{t.contributions}</Text>
         {contributions.map((c, idx) => (
           <View key={c.id} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
             <Text style={{ flex: 1 }}>{c.name}</Text>
@@ -123,7 +125,7 @@ export const AddEvent: React.FC<AddEventProps> = ({
           </View>
         ))}
         {/* Add Friends Section */}
-        <Text style={{ marginTop: 12, marginBottom: 4, fontWeight: 'bold' }}>Add Friends</Text>
+        <Text style={{ marginTop: 12, marginBottom: 4, fontWeight: 'bold' }}>{t.addFriends}</Text>
         {availableFriends.map(friend => (
           <TouchableOpacity
             key={friend.id}
@@ -141,13 +143,13 @@ export const AddEvent: React.FC<AddEventProps> = ({
       </ScrollView>
       <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 24, paddingBottom: 16 }}>
         <TouchableOpacity onPress={onClose} style={{ marginRight: 12 }}>
-          <Text style={{ color: 'red', fontWeight: 'bold' }}>Cancel</Text>
+          <Text style={{ color: 'red', fontWeight: 'bold' }}>{t.cancel}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
             const formattedDate = formatDate(date);
             if (!isValidDate(formattedDate)) {
-              setDateError('Please enter a valid date in YYYY-MM-DD format.');
+              setDateError(t.pleaseEnterValidDate);
               return;
             }
             onAdd({
@@ -163,7 +165,7 @@ export const AddEvent: React.FC<AddEventProps> = ({
             onClose();
           }}
         >
-          <Text style={{ color: '#17851bff', fontWeight: 'bold' }}>Add</Text>
+          <Text style={{ color: '#17851bff', fontWeight: 'bold' }}>{t.add}</Text>
         </TouchableOpacity>
       </View>
     </View>

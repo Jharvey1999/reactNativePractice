@@ -50,7 +50,7 @@ export default function FriendsScreen() {
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#30c035ff', dark: '#17851bff' }}
-      headerImage={<UniversalHeader title="Friends" />}
+      headerImage={<UniversalHeader title={t.friends} />}
     >
       <View style={sharedStyles.row}>
         {/* Left Column Menu (shared) */}

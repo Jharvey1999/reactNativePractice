@@ -1,4 +1,5 @@
 import { events } from '@/storage/events_database';
+import { users } from '@/storage/user_database';
 
 export function addEvent(eventData: {
   id: string;
@@ -7,19 +8,27 @@ export function addEvent(eventData: {
   contributions: { id: string; contribution: number }[];
   createdBy: string;
 }) {
-  // Add the new event to your events array
+  // add event to existing array
   events.push({
     id: eventData.id,
     name: eventData.name,
     date: eventData.date,
     totalCost: eventData.contributions.reduce((sum, c) => sum + c.contribution, 0),
     paid: eventData.contributions.find(c => c.id === eventData.createdBy)?.contribution || 0,
-    uOwed: 0, // You can calculate this as needed
-    othersOwed: 0, // You can calculate this as needed
-    users: eventData.contributions.map(c => ({
-      id: c.id,
-      name: '', // Fill in user name if available
-      contribution: c.contribution,
-    })),
+    uOwed: 0,
+    othersOwed: 0, 
+    users: eventData.contributions.map(c => {
+      // build user to find all data of that user
+      const fullUser = users.find(user => user.id === c.id);
+      
+      if (!fullUser) {
+        throw new Error(`User with id ${c.id} not found`);
+      }
+      
+      return {
+        ...fullUser,
+        contribution: c.contribution,
+      };
+    }),
   });
 }

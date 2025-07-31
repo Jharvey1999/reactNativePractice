@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Platform } from 'react-native';
 import { Event } from '@/storage/events_database';
+import { useTranslation } from '@/components/hooks/useTranslation';
+
 
 type SummaryEventProps = {
   visible: boolean;
@@ -15,6 +17,7 @@ export const SummaryEvent: React.FC<SummaryEventProps> = ({
   currentUserId,
   onClose,
 }) => {
+  const { t } = useTranslation();
   if (!visible) return null;
 
   // Calculate totals
@@ -44,19 +47,19 @@ export const SummaryEvent: React.FC<SummaryEventProps> = ({
         elevation: Platform.OS === 'android' ? 8 : 0,
       }}
     >
-      <Text style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 16 }}>Summary</Text>
-      <Text style={{ marginBottom: 12 }}>Total Events: <Text style={{ fontWeight: 'bold' }}>{events.length}</Text></Text>
+      <Text style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 16 }}>{t.summary}</Text>
+      <Text style={{ marginBottom: 12 }}>{t.totalEvents}: <Text style={{ fontWeight: 'bold' }}>{events.length}</Text></Text>
       <Text style={{ color: 'red', marginBottom: 8 }}>
-        You Owe: <Text style={{ fontWeight: 'bold' }}>${totalOwed.toFixed(2)}</Text>
+        {t.youOwe}: <Text style={{ fontWeight: 'bold' }}>${totalOwed.toFixed(2)}</Text>
       </Text>
       <Text style={{ color: 'green', marginBottom: 8 }}>
-        You Are Owed: <Text style={{ fontWeight: 'bold' }}>${totalIsOwed.toFixed(2)}</Text>
+        {t.youAreOwed}: <Text style={{ fontWeight: 'bold' }}>${totalIsOwed.toFixed(2)}</Text>
       </Text>
       <TouchableOpacity
         style={{ marginTop: 16, alignSelf: 'flex-end' }}
         onPress={onClose}
       >
-        <Text style={{ color: 'red', fontWeight: 'bold' }}>Close</Text>
+        <Text style={{ color: 'red', fontWeight: 'bold' }}>{t.close}</Text>
       </TouchableOpacity>
     </View>
   );
